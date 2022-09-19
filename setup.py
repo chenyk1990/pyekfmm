@@ -28,7 +28,7 @@ eikonal_module = Extension('eikonal', sources=['pyekfmm/src/eikonal.c'])
 from numpy.distutils.core import setup 
 setup(
     name="pyekfmm",
-    version="0.0.1",
+    version="0.0.3",
     license='GNU General Public License, Version 3 (GPLv3)',
     description="Fast Marching Method for Traveltime Calculation",
     long_description=long_description,
