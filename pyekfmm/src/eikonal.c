@@ -708,7 +708,7 @@ void fastmarch_close (void)
 
 
 // creating functions that returning PyObject.
-static PyObject *eikonalc(PyObject *self, PyObject *args){
+static PyObject *eikonalc_oneshot(PyObject *self, PyObject *args){
   // variables for our parameters. our parameters that are coming from python will be stored in theese variables.
   int number1;
   int number2;
@@ -724,9 +724,6 @@ static PyObject *eikonalc(PyObject *self, PyObject *args){
 
   // after parsing, we are doing our job.
 //   result = number1 + number2;
-
-
-  printf("HHHH\n");
 
     float f1,f2,f3,f4,f5,f6,f7,f8,f9;
     int f10,f11,f12,f13;
@@ -745,21 +742,19 @@ PyArg_ParseTuple(args, "Offfffffffiiii", &arg1, &f1, &f2, &f3, &f4, &f5, &f6, &f
 // 
 
 //  PyArg_ParseTuple(args, "f", &f2);
- 	printf("f1=%f\n",f1);
- 	printf("f2=%f\n",f2);
-  	printf("f3=%f\n",f3);
- 	printf("f4=%f\n",f4);
- 	printf("f5=%f\n",f5);
-  	printf("f6=%f\n",f6);
- 	printf("f7=%f\n",f7);
- 	printf("f8=%f\n",f8);
-  	printf("f9=%f\n",f9);
- 	printf("f10=%d\n",f10);
- 	printf("f11=%d\n",f11);
-  	printf("f12=%d\n",f12);
-  	printf("f13=%d\n",f13);
-  	
-	printf("HHHH2\n");
+//  	printf("f1=%f\n",f1);
+//  	printf("f2=%f\n",f2);
+//   	printf("f3=%f\n",f3);
+//  	printf("f4=%f\n",f4);
+//  	printf("f5=%f\n",f5);
+//   	printf("f6=%f\n",f6);
+//  	printf("f7=%f\n",f7);
+//  	printf("f8=%f\n",f8);
+//   	printf("f9=%f\n",f9);
+//  	printf("f10=%d\n",f10);
+//  	printf("f11=%d\n",f11);
+//   	printf("f12=%d\n",f12);
+//   	printf("f13=%d\n",f13);
 
     int b1, b2, b3, n1, n2, n3, nshot, ndim, i, is,order,n123, *p;
     float br1, br2, br3, o1, o2, o3, d1, d2, d3, slow;
@@ -791,11 +786,11 @@ PyArg_ParseTuple(args, "Offfffffffiiii", &arg1, &f1, &f2, &f3, &f4, &f5, &f6, &f
      * my code starts here
      */
     nd=PyArray_NDIM(arr1);
-    printf("nd=%d\n",nd);
+//     printf("nd=%d\n",nd);
 // // 
     npy_intp *sp=PyArray_SHAPE(arr1);
 // // 
-    printf("array dimentsion: %ld\n",*sp);
+//     printf("array dimentsion: %ld\n",*sp);
 // 
 
 	
@@ -919,42 +914,8 @@ PyArg_ParseTuple(args, "Offfffffffiiii", &arg1, &f1, &f2, &f3, &f4, &f5, &f6, &f
 // 	sf_floatwrite (t,n123,time);
 // 	fwrite(t,1,n123*sizeof(float),time);
     }
-
-
-
-
-
-
-
-  // like before, this part is parsing our variable to a python value and returning it.
-  // in here i means we are returning an integer that comes from result variable.
-//   return Py_BuildValue("i", result);
-  
-//   PyArrayObject *meanX;
-//   meanX = (PyArrayObject *) t ;
-//   return PyArray_Return(meanX);
-//   
-
-//     PyArrayObject *X, *meanX;
-//     int axis;
-// 
-//     PyArg_ParseTuple(args, "O!i", &PyArray_Type, &X, &axis);
-//     meanX = (PyArrayObject *) PyArray_Mean(X, axis, NPY_FLOAT, NULL);
-// 	PyArrayObject *meanX;
-// 	meanX = (PyArrayObject *) t;
-//     return PyArray_Return(meanX);
-    
-//   m = PyModule_Create(&moduledef);
-//   
-//   Py_DECREF(logit);
-//   return m;
-
-
-    printf("Hello, world!\n");
-//     return PyArray_Return(arr1);
     
     PyArrayObject *vecout;
-// 	int i;
 	npy_intp dims[2];
 	dims[0]=n1*n2*n3;dims[1]=1;
 	/* Parse tuples separately since args will differ between C fcns */
@@ -972,9 +933,213 @@ PyArg_ParseTuple(args, "Offfffffffiiii", &arg1, &f1, &f2, &f3, &f4, &f5, &f6, &f
 	int d=vecout->dimensions[0];
 // 	vecout->data[0]=1.2;
 // 	vecout->data[1]=1.6;
-	printf("d=%d\n",d);
+// 	printf("d=%d\n",d);
 // 	printf("t=%f\n",vecout->data[0]);
-	printf("t=%f\n",(*((float*)PyArray_GETPTR1(vecout,0))));
+// 	printf("t=%f\n",(*((float*)PyArray_GETPTR1(vecout,0))));
+	
+	return PyArray_Return(vecout);
+	
+	
+	
+}
+
+static PyObject *eikonalc_multishots(PyObject *self, PyObject *args){
+    float f4,f5,f6,f7,f8,f9;
+    int f10,f11,f12,f13;
+    
+	/**initialize data input**/
+    PyObject *arg1=NULL;
+//     PyObject *arg2=NULL;
+    PyObject *arr1=NULL;
+    int nd, nd2;
+    
+    PyObject *f1=NULL;
+    PyObject *f2=NULL;
+    PyObject *f3=NULL;
+    PyObject *arrf1=NULL;
+    PyObject *arrf2=NULL;
+    PyObject *arrf3=NULL;
+
+PyArg_ParseTuple(args, "OOOOffffffiiii", &arg1, &f1, &f2, &f3, &f4, &f5, &f6, &f7, &f8, &f9, &f10, &f11, &f12, &f13);
+
+//  PyArg_ParseTuple(args, "f", &f2);
+//  	printf("f1=%f\n",f1);
+//  	printf("f2=%f\n",f2);
+//   	printf("f3=%f\n",f3);
+//  	printf("f4=%f\n",f4);
+//  	printf("f5=%f\n",f5);
+//   	printf("f6=%f\n",f6);
+//  	printf("f7=%f\n",f7);
+//  	printf("f8=%f\n",f8);
+//   	printf("f9=%f\n",f9);
+//  	printf("f10=%d\n",f10);
+//  	printf("f11=%d\n",f11);
+//   	printf("f12=%d\n",f12);
+//   	printf("f13=%d\n",f13);
+
+    int b1, b2, b3, n1, n2, n3, nshot, ndim, i, is,order,n123, *p;
+    float br1, br2, br3, o1, o2, o3, d1, d2, d3, slow;
+    float **s, *t, *v;
+    float *x, *y, *z;
+    bool isvel, sweep, plane[3];
+    
+	o1=f4;
+	o2=f5;
+	o3=f6;
+	
+	d1=f7;
+	d2=f8;
+	d3=f9;
+	
+	n1=f10;
+	n2=f11;
+	n3=f12;
+	
+	order=f13;
+	
+    printf("Check1\n");
+    
+    arr1 = PyArray_FROM_OTF(arg1, NPY_FLOAT, NPY_IN_ARRAY);
+    arrf1 = PyArray_FROM_OTF(f1, NPY_FLOAT, NPY_IN_ARRAY);
+    arrf2 = PyArray_FROM_OTF(f2, NPY_FLOAT, NPY_IN_ARRAY);
+    arrf3 = PyArray_FROM_OTF(f3, NPY_FLOAT, NPY_IN_ARRAY);
+    /*
+     * my code starts here
+     */
+    nd=PyArray_NDIM(arr1);
+    nd2=PyArray_NDIM(arrf1);
+    
+//     printf("nd=%d\n",nd);
+// // 
+    npy_intp *sp=PyArray_SHAPE(arr1);
+    
+        printf("Check3333\n");
+    npy_intp *spxyz=PyArray_SHAPE(arrf1);
+    
+    printf("Check33334444\n");
+    
+    
+    nshot=*spxyz;
+// // 
+    printf("array dimentsion: %ld\n",*sp);
+    printf("array dimentsion spxyz: %ld\n",*spxyz);
+
+
+	isvel=true;
+	sweep=false;
+	br1=d1;
+	br2=d2;
+	br3=d3;
+	plane[2]=false;
+	plane[1]=false;
+	plane[0]=false;
+	b1= plane[2]? n1: (int) (br1/d1+0.5); 
+	b2= plane[1]? n2: (int) (br2/d2+0.5);
+	b3= plane[0]? n3: (int) (br3/d3+0.5); 
+
+
+    if( b1<1 ) b1=1;  
+    if( b2<1 ) b2=1;  
+    if( b3<1 ) b3=1;
+
+    /* File with shot locations (n2=number of shots, n1=3) */
+
+// 	nshot = 1;
+	ndim = 3;
+    
+// 	s = sf_floatalloc2 (ndim,nshot);   
+    s = (float**)malloc(nshot * sizeof(float*));
+    for (int i = 0; i < nshot; i++)
+        s[i] = (float*)malloc(ndim * sizeof(float));
+	
+
+    n123 = n1*n2*n3;
+
+	t = (float*)malloc(n123*nshot * sizeof(float));
+	v = (float*)malloc(n123 * sizeof(float));
+	p = (float*)malloc(n123 * sizeof(float));
+
+	x = (float*)malloc(nshot * sizeof(float));
+	y = (float*)malloc(nshot * sizeof(float));
+	z = (float*)malloc(nshot * sizeof(float));
+
+
+    if (*sp != n123)
+    {
+    	printf("Dimension mismatch, N_input = %d, N_model = %d", *sp, n123);
+    	return NULL;
+    }
+    
+    for (i=0; i<*sp; i++)
+    {
+//         printf("%lf ",*((float*)PyArray_GETPTR1(arr1,i)));
+        v[i]=*((float*)PyArray_GETPTR1(arr1,i));
+    }
+	printf("array dimentsion2: %ld, nshot=%d\n",*sp,nshot);
+	/*reading xyz*/
+    for (i=0; i<nshot; i++)
+    {
+//         printf("%lf ",*((float*)PyArray_GETPTR1(arr1,i)));
+        s[i][0]=*((float*)PyArray_GETPTR1(arrf1,i));
+        s[i][1]=*((float*)PyArray_GETPTR1(arrf2,i));
+        s[i][2]=*((float*)PyArray_GETPTR1(arrf3,i));
+        printf("shot = %d\n",i);
+    }
+    printf("array dimentsion33333: %ld\n",*sp);
+    
+    
+    if (isvel) {
+	/* transform velocity to slowness squared */
+	for(i = 0; i < n123; i++) {
+	    slow = v[i];
+	    v[i] = 1./(slow*slow);
+	}
+    } 
+    
+    if (!sweep) fastmarch_init (n3,n2,n1);
+ 
+    /* loop over shots */
+//     nshot=1;
+    for( is = 0; is < nshot; is++) {
+	printf("shot %d of %d;",is+1,nshot);
+	if (sweep) {
+	    continue;
+	} else {
+	    fastmarch(t+is*n123,v,p, plane,
+		      n3,n2,n1,
+		      o3,o2,o1,
+		      d3,d2,d1,
+		      s[is][2],s[is][1],s[is][0], 
+		      b3,b2,b1,
+		      order);
+		      printf("FMM,n123=%d\n",n123);
+	}	
+
+// 	sf_floatwrite (t,n123,time);
+// 	fwrite(t,1,n123*sizeof(float),time);
+    }
+    
+    PyArrayObject *vecout;
+	npy_intp dims[2];
+	dims[0]=n1*n2*n3*nshot;dims[1]=1;
+	/* Parse tuples separately since args will differ between C fcns */
+	/* Make a new double vector of same dimension */
+	vecout=(PyArrayObject *) PyArray_SimpleNew(1,dims,NPY_FLOAT);
+	
+	
+// 	PyArray_GETPTR1(vecout,0) = 1.0;
+	(*((float*)PyArray_GETPTR1(vecout,0))) = 1.0000000;
+	
+	for(i=0;i<dims[0];i++)
+		(*((float*)PyArray_GETPTR1(vecout,i))) = t[i];
+		
+// 	a=(float *) vecout->data;
+	int d=vecout->dimensions[0];
+// 	vecout->data[0]=1.2;
+// 	vecout->data[1]=1.6;
+// 	printf("d=%d\n",d);
+// 	printf("t=%f\n",vecout->data[0]);
+// 	printf("t=%f\n",(*((float*)PyArray_GETPTR1(vecout,0))));
 	
 	return PyArray_Return(vecout);
 	
@@ -983,13 +1148,225 @@ PyArg_ParseTuple(args, "Offfffffffiiii", &arg1, &f1, &f2, &f3, &f4, &f5, &f6, &f
 }
 
 
+static PyObject *eikonalc_surf(PyObject *self, PyObject *args){
+    float f4,f5,f6,f7,f8,f9;
+    int f10,f11,f12,f13;
+    
+	/**initialize data input**/
+    PyObject *arg1=NULL;
+//     PyObject *arg2=NULL;
+    PyObject *arr1=NULL;
+    int nd, nd2;
+    
+    PyObject *f1=NULL;
+    PyObject *f2=NULL;
+    PyObject *f3=NULL;
+    PyObject *arrf1=NULL;
+    PyObject *arrf2=NULL;
+    PyObject *arrf3=NULL;
+
+PyArg_ParseTuple(args, "OOOOffffffiiii", &arg1, &f1, &f2, &f3, &f4, &f5, &f6, &f7, &f8, &f9, &f10, &f11, &f12, &f13);
+
+//  PyArg_ParseTuple(args, "f", &f2);
+//  	printf("f1=%f\n",f1);
+//  	printf("f2=%f\n",f2);
+//   	printf("f3=%f\n",f3);
+//  	printf("f4=%f\n",f4);
+//  	printf("f5=%f\n",f5);
+//   	printf("f6=%f\n",f6);
+//  	printf("f7=%f\n",f7);
+//  	printf("f8=%f\n",f8);
+//   	printf("f9=%f\n",f9);
+//  	printf("f10=%d\n",f10);
+//  	printf("f11=%d\n",f11);
+//   	printf("f12=%d\n",f12);
+//   	printf("f13=%d\n",f13);
+
+    int b1, b2, b3, n1, n2, n3, nshot, ndim, i, is,order,n123, *p;
+    float br1, br2, br3, o1, o2, o3, d1, d2, d3, slow;
+    float **s, *t, *v;
+    float *x, *y, *z;
+    bool isvel, sweep, plane[3];
+    
+	o1=f4;
+	o2=f5;
+	o3=f6;
+	
+	d1=f7;
+	d2=f8;
+	d3=f9;
+	
+	n1=f10;
+	n2=f11;
+	n3=f12;
+	
+	order=f13;
+	
+    printf("Check1\n");
+    
+    arr1 = PyArray_FROM_OTF(arg1, NPY_FLOAT, NPY_IN_ARRAY);
+    arrf1 = PyArray_FROM_OTF(f1, NPY_FLOAT, NPY_IN_ARRAY);
+    arrf2 = PyArray_FROM_OTF(f2, NPY_FLOAT, NPY_IN_ARRAY);
+    arrf3 = PyArray_FROM_OTF(f3, NPY_FLOAT, NPY_IN_ARRAY);
+    /*
+     * my code starts here
+     */
+    nd=PyArray_NDIM(arr1);
+    nd2=PyArray_NDIM(arrf1);
+    
+//     printf("nd=%d\n",nd);
+// // 
+    npy_intp *sp=PyArray_SHAPE(arr1);
+    
+        printf("Check3333\n");
+    npy_intp *spxyz=PyArray_SHAPE(arrf1);
+    
+    printf("Check33334444\n");
+    
+    
+    nshot=*spxyz;
+// // 
+    printf("array dimentsion: %ld\n",*sp);
+    printf("array dimentsion spxyz: %ld\n",*spxyz);
+
+
+	isvel=true;
+	sweep=false;
+	br1=d1;
+	br2=d2;
+	br3=d3;
+	plane[2]=false;
+	plane[1]=false;
+	plane[0]=false;
+	b1= plane[2]? n1: (int) (br1/d1+0.5); 
+	b2= plane[1]? n2: (int) (br2/d2+0.5);
+	b3= plane[0]? n3: (int) (br3/d3+0.5); 
+
+
+    if( b1<1 ) b1=1;  
+    if( b2<1 ) b2=1;  
+    if( b3<1 ) b3=1;
+
+    /* File with shot locations (n2=number of shots, n1=3) */
+
+// 	nshot = 1;
+	ndim = 3;
+    
+// 	s = sf_floatalloc2 (ndim,nshot);   
+    s = (float**)malloc(nshot * sizeof(float*));
+    for (int i = 0; i < nshot; i++)
+        s[i] = (float*)malloc(ndim * sizeof(float));
+	
+
+    n123 = n1*n2*n3;
+
+	t = (float*)malloc(n123*nshot * sizeof(float));
+	v = (float*)malloc(n123 * sizeof(float));
+	p = (float*)malloc(n123 * sizeof(float));
+
+	x = (float*)malloc(nshot * sizeof(float));
+	y = (float*)malloc(nshot * sizeof(float));
+	z = (float*)malloc(nshot * sizeof(float));
+
+
+    if (*sp != n123)
+    {
+    	printf("Dimension mismatch, N_input = %d, N_model = %d", *sp, n123);
+    	return NULL;
+    }
+    
+    for (i=0; i<*sp; i++)
+    {
+//         printf("%lf ",*((float*)PyArray_GETPTR1(arr1,i)));
+        v[i]=*((float*)PyArray_GETPTR1(arr1,i));
+    }
+	printf("array dimentsion2: %ld, nshot=%d\n",*sp,nshot);
+	/*reading xyz*/
+    for (i=0; i<nshot; i++)
+    {
+//         printf("%lf ",*((float*)PyArray_GETPTR1(arr1,i)));
+        s[i][0]=*((float*)PyArray_GETPTR1(arrf1,i));
+        s[i][1]=*((float*)PyArray_GETPTR1(arrf2,i));
+        s[i][2]=*((float*)PyArray_GETPTR1(arrf3,i));
+        printf("shot = %d\n",i);
+    }
+    printf("array dimentsion33333: %ld\n",*sp);
+    
+    
+    if (isvel) {
+	/* transform velocity to slowness squared */
+	for(i = 0; i < n123; i++) {
+	    slow = v[i];
+	    v[i] = 1./(slow*slow);
+	}
+    } 
+    
+    if (!sweep) fastmarch_init (n3,n2,n1);
+ 
+    /* loop over shots */
+//     nshot=1;
+    int i1,i2,i3;
+    float *tt;
+    tt = (float*)malloc(n1*n2*nshot * sizeof(float)); /*nx*ny*nshot*/
+    for( is = 0; is < nshot; is++) {
+	printf("shot %d of %d;",is+1,nshot);
+	if (sweep) {
+	    continue;
+	} else {
+	    fastmarch(t+is*n123,v,p, plane,
+		      n3,n2,n1,
+		      o3,o2,o1,
+		      d3,d2,d1,
+		      s[is][2],s[is][1],s[is][0], 
+		      b3,b2,b1,
+		      order);
+		      printf("FMM,n123=%d\n",n123);
+	}	
+
+	for(i1=0;i1<n1;i1++) /*x*/
+		for(i2=0;i2<n2;i2++) /*y*/
+			for(i3=0;i3<1;i3++) /*z*/
+				tt[i1+i2*n1+i3*n1*n2+is*n1*n2]=t[i1+i2*n1+i3*n1*n2+is*n1*n2*n3];
+				
+    }
+    
+    PyArrayObject *vecout;
+	npy_intp dims[2];
+	dims[0]=n1*n2*nshot;dims[1]=1;
+	/* Parse tuples separately since args will differ between C fcns */
+	/* Make a new double vector of same dimension */
+	vecout=(PyArrayObject *) PyArray_SimpleNew(1,dims,NPY_FLOAT);
+	
+	
+// 	PyArray_GETPTR1(vecout,0) = 1.0;
+	(*((float*)PyArray_GETPTR1(vecout,0))) = 1.0000000;
+	
+	for(i=0;i<dims[0];i++)
+		(*((float*)PyArray_GETPTR1(vecout,i))) = tt[i];
+		
+// 	a=(float *) vecout->data;
+	int d=vecout->dimensions[0];
+// 	vecout->data[0]=1.2;
+// 	vecout->data[1]=1.6;
+// 	printf("d=%d\n",d);
+// 	printf("t=%f\n",vecout->data[0]);
+// 	printf("t=%f\n",(*((float*)PyArray_GETPTR1(vecout,0))));
+	
+	return PyArray_Return(vecout);
+	
+	
+	
+}
+
 // documentation for each functions.
 static char eikonalc_document[] = "Document stuff for eikonal...";
 
 // defining our functions like below:
 // function_name, function, METH_VARARGS flag, function documents
 static PyMethodDef functions[] = {
-  {"eikonalc", eikonalc, METH_VARARGS, eikonalc_document},
+  {"eikonalc_oneshot", eikonalc_oneshot, METH_VARARGS, eikonalc_document},
+  {"eikonalc_multishots", eikonalc_multishots, METH_VARARGS, eikonalc_document},
+  {"eikonalc_surf", eikonalc_surf, METH_VARARGS, eikonalc_document},
   {NULL, NULL, 0, NULL}
 };
 

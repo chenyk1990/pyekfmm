@@ -8,14 +8,12 @@
     (http://www.gnu.org/copyleft/gpl.html)
 """
 
-__version__ = "0.0.3"
+__version__ = "0.0.5"
 
 from .fmm import eikonal
+from .fmm import eikonal_surf
 
-from eikonal import *
-
-# This is my first C-extension (more will be coming), the first step to make the codes faster
-from calculator import *
+from calculator import * #This is a template for writing python-C APIs
 from eikonalc import *
 
 
