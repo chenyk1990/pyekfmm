@@ -3,9 +3,7 @@ import numpy as np
 # t=fmm.eikonal(1,1);
 
 vel=3.0*np.ones([501*501,1],dtype='float32');
-t=fmm.eikonal(vel);
-
-
+t=fmm.fmm.eikonal(vel,xyz=np.array([0,0,0]),ax=[0,0.01,501],ay=[0,0.01,1],az=[0,0.01,501]);
 
 
 time=t.reshape(501,501,order='F');

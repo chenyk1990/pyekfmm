@@ -12,10 +12,13 @@ __version__ = "0.0.3"
 
 from .fmm import eikonal
 
+from eikonal import *
 
 # This is my first C-extension (more will be coming), the first step to make the codes faster
 from calculator import *
-from eikonal import *
+from eikonalc import *
+
+
 
 
 

@@ -23,7 +23,7 @@ from distutils.core import Extension
 # 'calculator' is extension's name and sources is a file name list.
 calculator_module = Extension('calculator', sources=['pyekfmm/src/calculator.c'])
 
-eikonal_module = Extension('eikonal', sources=['pyekfmm/src/eikonal.c'])
+eikonalc_module = Extension('eikonalc', sources=['pyekfmm/src/eikonal.c'])
 
 from numpy.distutils.core import setup 
 setup(
@@ -35,7 +35,7 @@ setup(
     author="pyekfmm developing team",
     author_email="chenyk2016@gmail.com",
     url="https://github.com/chenyk1990/pyekfmm",
-    ext_modules=[calculator_module,eikonal_module],
+    ext_modules=[calculator_module,eikonalc_module],
     packages=['pyekfmm'],
     include_package_data=True,
     zip_safe=False,

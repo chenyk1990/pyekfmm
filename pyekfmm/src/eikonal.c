@@ -708,7 +708,7 @@ void fastmarch_close (void)
 
 
 // creating functions that returning PyObject.
-static PyObject *eikonal(PyObject *self, PyObject *args){
+static PyObject *eikonalc(PyObject *self, PyObject *args){
   // variables for our parameters. our parameters that are coming from python will be stored in theese variables.
   int number1;
   int number2;
@@ -728,16 +728,64 @@ static PyObject *eikonal(PyObject *self, PyObject *args){
 
   printf("HHHH\n");
 
-
+    float f1,f2,f3,f4,f5,f6,f7,f8,f9;
+    int f10,f11,f12,f13;
+    
 	/**initialize data input**/
     PyObject *arg1=NULL;
 //     PyObject *arg2=NULL;
     PyObject *arr1=NULL;
     int nd;
 
-    if (!PyArg_ParseTuple(args, "O", &arg1))
-        return NULL;
+//     if (!PyArg_ParseTuple(args, "Offfffffffffff", &arg1, &f2, &f3, &f4, &f5, &f6, &f7, &f8, &f9, &f10, &f11, &f12, &f13))
+//         return NULL;
+PyArg_ParseTuple(args, "Offfffffffiiii", &arg1, &f1, &f2, &f3, &f4, &f5, &f6, &f7, &f8, &f9, &f10, &f11, &f12, &f13);
 
+// PyArg_ParseTuple(args, "fffffffffffff", &f2, &f3, &f4, &f5, &f6, &f7, &f8, &f9, &f10, &f11, &f12, &f13);
+// 
+
+//  PyArg_ParseTuple(args, "f", &f2);
+ 	printf("f1=%f\n",f1);
+ 	printf("f2=%f\n",f2);
+  	printf("f3=%f\n",f3);
+ 	printf("f4=%f\n",f4);
+ 	printf("f5=%f\n",f5);
+  	printf("f6=%f\n",f6);
+ 	printf("f7=%f\n",f7);
+ 	printf("f8=%f\n",f8);
+  	printf("f9=%f\n",f9);
+ 	printf("f10=%d\n",f10);
+ 	printf("f11=%d\n",f11);
+  	printf("f12=%d\n",f12);
+  	printf("f13=%d\n",f13);
+  	
+	printf("HHHH2\n");
+
+    int b1, b2, b3, n1, n2, n3, nshot, ndim, i, is,order,n123, *p;
+    float br1, br2, br3, o1, o2, o3, d1, d2, d3, slow;
+    float **s, *t, *v;
+    float x, y, z;
+    bool isvel, sweep, plane[3];
+    
+	x=f1;
+	y=f2;
+	z=f3;
+	
+	o1=f4;
+	o2=f5;
+	o3=f6;
+	
+	d1=f7;
+	d2=f8;
+	d3=f9;
+	
+	n1=f10;
+	n2=f11;
+	n3=f12;
+	
+	order=f13;
+	
+	
     arr1 = PyArray_FROM_OTF(arg1, NPY_FLOAT, NPY_IN_ARRAY);
     /*
      * my code starts here
@@ -762,22 +810,19 @@ static PyObject *eikonal(PyObject *self, PyObject *args){
 // 	time=fopen("time.bin","wb");
 // 	printf("HHHH\n");
 
-    int b1, b2, b3, n1, n2, n3, nshot, ndim, i, is,order,n123, *p;
-    float br1, br2, br3, o1, o2, o3, d1, d2, d3, slow;
-    float **s, *t, *v;
-    bool isvel, sweep, plane[3];
+
     
-	n1=501;
-	n2=501;
-	n3=1;
-	d1=0.01;
-	d2=0.01;
-	d3=1;
-	o1=0;
-	o2=0;
-	o3=0;
+// 	n1=501;
+// 	n2=501;
+// 	n3=1;
+// 	d1=0.01;
+// 	d2=0.01;
+// 	d3=1;
+// 	o1=0;
+// 	o2=0;
+// 	o3=0;
 	isvel=true;
-	order=2;
+// 	order=2;
 	sweep=false;
 	br1=d1;
 	br2=d2;
@@ -809,9 +854,9 @@ static PyObject *eikonal(PyObject *self, PyObject *args){
 // 	/* Shot location (used if no shotfile) */
 // 	if(!sf_getfloat("yshot",&s[0][1])) s[0][1]=o2 + 0.5*(n2-1)*d2;
 // 	if(!sf_getfloat("xshot",&s[0][2])) s[0][2]=o3 + 0.5*(n3-1)*d3;
-	s[0][0]=0;
-	s[0][1]=0;
-	s[0][2]=0;
+	s[0][0]=x;
+	s[0][1]=y;
+	s[0][2]=z;
 	
 	
 // 	sf_warning("Shooting from zshot=%g yshot=%g xshot=%g",
@@ -911,7 +956,7 @@ static PyObject *eikonal(PyObject *self, PyObject *args){
     PyArrayObject *vecout;
 // 	int i;
 	npy_intp dims[2];
-	dims[0]=n1*n2;dims[1]=1;
+	dims[0]=n1*n2*n3;dims[1]=1;
 	/* Parse tuples separately since args will differ between C fcns */
 	/* Make a new double vector of same dimension */
 	vecout=(PyArrayObject *) PyArray_SimpleNew(1,dims,NPY_FLOAT);
@@ -939,31 +984,31 @@ static PyObject *eikonal(PyObject *self, PyObject *args){
 
 
 // documentation for each functions.
-static char eikonal_document[] = "Document stuff for eikonal...";
+static char eikonalc_document[] = "Document stuff for eikonal...";
 
 // defining our functions like below:
 // function_name, function, METH_VARARGS flag, function documents
 static PyMethodDef functions[] = {
-  {"eikonal", eikonal, METH_VARARGS, eikonal_document},
+  {"eikonalc", eikonalc, METH_VARARGS, eikonalc_document},
   {NULL, NULL, 0, NULL}
 };
 
 // initializing our module informations and settings in this structure
 // for more informations, check head part of this file. there are some important links out there.
-static struct PyModuleDef eikonalModule = {
+static struct PyModuleDef eikonalcModule = {
   PyModuleDef_HEAD_INIT, // head informations for Python C API. It is needed to be first member in this struct !!
-  "eikonal",  // module name
+  "eikonalc",  // module name
   NULL, // means that the module does not support sub-interpreters, because it has global state.
   -1,
   functions  // our functions list
 };
 
 // runs while initializing and calls module creation function.
-PyMODINIT_FUNC PyInit_eikonal(void){
+PyMODINIT_FUNC PyInit_eikonalc(void){
 
 //   return PyModule_Create(&eikonalModule);
   
-    PyObject *module = PyModule_Create(&eikonalModule);
+    PyObject *module = PyModule_Create(&eikonalcModule);
     import_array();
     return module;
 }
