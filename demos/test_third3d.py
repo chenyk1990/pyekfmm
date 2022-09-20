@@ -37,3 +37,9 @@ plt.xlabel('X');plt.ylabel('Z');
 plt.jet()
 plt.colorbar(orientation='horizontal',shrink=0.6);
 plt.show()
+
+
+## Verify
+print(['Testing result:',time.max(),time.min(),time.std(),time.var()])
+print(['Correct result:',0.5770362, 0.0, 0.094430424, 0.008917105])
+

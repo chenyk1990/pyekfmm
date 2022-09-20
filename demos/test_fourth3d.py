@@ -37,3 +37,6 @@ plt.jet()
 plt.colorbar(orientation='horizontal',shrink=0.6);
 plt.show()
 
+## Verify
+print(['Testing result:',time.max(),time.min(),time.std(),time.var()])
+print(['Correct result:',0.47041193, 0.0, 0.096254215, 0.009264874])
