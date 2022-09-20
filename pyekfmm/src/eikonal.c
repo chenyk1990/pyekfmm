@@ -55,55 +55,6 @@ float* pqueue_extract (void)
     return v;
 }
 
-float* pqueue_extract2 (void)
-/*< Extract the largest element >*/
-{
-    unsigned int c;
-    int n;
-    float *v, *t;
-    float **xi, **xc;
-    
-    v = *(x1);
-    *(xi = x1) = t = *(xn--);
-    n = (int) (xn-x);
-    if (n < 0) return NULL;
-    for (c = 2; c <= (unsigned int) n; c <<= 1) {
-	xc = x + c;
-	if (c < (unsigned int) n && **xc < **(xc+1)) {
-	    c++; xc++;
-	}
-	if (*t >= **xc) break;
-	*xi = *xc; xi = xc;
-    }
-    *xi = t;
-    return v;
-}
-
-void pqueue_update (float **v)
-/*< restore the heap: the value has been altered >*/
-{
-  unsigned int c;
-  int n;
-  float **xc, **xi;
-
-  xi = v; 
-  n = (int) (xn-x); c = (unsigned int) (xi-x);
-  for (c <<= 1; c <= (unsigned int) n; c <<= 1) {
-      xc = x + c;
-      if (c < (unsigned int) n && **xc > **(xc+1)) {
-	  c++; xc++;
-      }
-      if (**v <= **xc) break;
-      *xi = *xc; xi = xc;
-  }
-  xi = v; c = (unsigned int) (xi-x);
-  for (c >>= 1; c > 0; c >>= 1) {
-      xc = x + c;
-      if (**v > **xc) break;
-      *xi = *xc; xi = xc; 
-  }
-  *xi = *v; 
-}
 /**** pqueue **/
 
 
@@ -228,7 +179,6 @@ static int update (float value, int i)
 	    pqueue_insert (ttime+i);
 	    return 1;
 	}
-/*	pqueue_update (&(ttime+i)); */
     }
     
     return 0;
@@ -244,7 +194,6 @@ static int update2 (float value, int i)
 	    pqueue_insert2 (ttime+i);
 	    return 1;
 	}
-/*	pqueue_update (&(ttime+i)); */
     }
     
     return 0;
@@ -785,6 +734,11 @@ PyArg_ParseTuple(args, "Offfffffffiiii", &arg1, &f1, &f2, &f3, &f4, &f5, &f6, &f
         v[i]=*((float*)PyArray_GETPTR1(arr1,i));
     }
     
+	for(i = 0; i < n123; i++) {
+	    slow = v[i];
+	    v[i] = 1./(slow*slow);
+	}
+    
     if (!sweep) fastmarch_init (n3,n2,n1);
  
     /* loop over shots */
@@ -922,7 +876,11 @@ static PyObject *eikonalc_multishots(PyObject *self, PyObject *args){
         s[i][2]=*((float*)PyArray_GETPTR1(arrf3,i));
     }
     
-    
+	for(i = 0; i < n123; i++) {
+	    slow = v[i];
+	    v[i] = 1./(slow*slow);
+	}
+	
     if (!sweep) fastmarch_init (n3,n2,n1);
  
     /* loop over shots */
@@ -1059,7 +1017,12 @@ static PyObject *eikonalc_surf(PyObject *self, PyObject *args){
         s[i][1]=*((float*)PyArray_GETPTR1(arrf2,i));
         s[i][2]=*((float*)PyArray_GETPTR1(arrf3,i));
     }
-    
+
+	for(i = 0; i < n123; i++) {
+	    slow = v[i];
+	    v[i] = 1./(slow*slow);
+	}
+	
     if (!sweep) fastmarch_init (n3,n2,n1);
  
     /* loop over shots */
