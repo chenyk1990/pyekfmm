@@ -8,13 +8,14 @@ def eikonal(vel,xyz,ax=[0,0.01,101],ay=[0,0.01,101],az=[0,0.01,101],order=2):
 	ax: axis x [ox,dx,nx]
 	ay: axis y [oy,dy,ny]
 	az: axis z [oz,dz,nz]
+	order: accuracy order [1 or 2]
 	
 	OUTPUT
 	times: traveltime in xyz respectively (1D numpy array)
 		   (one event: nx*ny*nz or multi-event: nx*ny*nz*ne)
 	
 	EXAMPLE
-	demos/test_first.py
+	demos/test_first-fifth.py
 	
 	COPYRIGHT
 	Yangkang Chen, 2022, The University of Texas at Austin
@@ -50,13 +51,14 @@ def eikonal_surf(vel,xyz,ax=[0,0.01,101],ay=[0,0.01,101],az=[0,0.01,101],order=2
 	ax: axis x [ox,dx,nx]
 	ay: axis y [oy,dy,ny]
 	az: axis z [oz,dz,nz]
+	order: accuracy order [1 or 2]
 	
 	OUTPUT
 	times: traveltime in xy of nshots (1D numpy array)
 		   size of times is nx*ny*nshots
 	
 	EXAMPLE
-	demos/test_xxx.py
+	demos/test_fourth3d.py
 	
 	COPYRIGHT
 	Yangkang Chen, 2022, The University of Texas at Austin
