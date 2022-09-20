@@ -657,10 +657,10 @@ static PyObject *eikonalc_oneshot(PyObject *self, PyObject *args){
 PyArg_ParseTuple(args, "Offfffffffiiii", &arg1, &f1, &f2, &f3, &f4, &f5, &f6, &f7, &f8, &f9, &f10, &f11, &f12, &f13);
 
     int b1, b2, b3, n1, n2, n3, nshot, ndim, i, is,order,n123, *p;
-    float br1, br2, br3, o1, o2, o3, d1, d2, d3, slow;
+    float br1, br2, br3, o1, o2, o3, d1, d2, d3;
     float **s, *t, *v;
     float x, y, z;
-    bool isvel, sweep, plane[3];
+    bool plane[3];
     
 	x=f1;
 	y=f2;
@@ -688,7 +688,6 @@ PyArg_ParseTuple(args, "Offfffffffiiii", &arg1, &f1, &f2, &f3, &f4, &f5, &f6, &f
     nd=PyArray_NDIM(arr1);
     npy_intp *sp=PyArray_SHAPE(arr1);
 
-	sweep=false;
 	br1=d1;
 	br2=d2;
 	br3=d3;
@@ -729,32 +728,25 @@ PyArg_ParseTuple(args, "Offfffffffiiii", &arg1, &f1, &f2, &f3, &f4, &f5, &f6, &f
     	return NULL;
     }
     
-    for (i=0; i<*sp; i++)
+    /*reading velocity*/
+    for (i=0; i<n123; i++)
     {
         v[i]=*((float*)PyArray_GETPTR1(arr1,i));
+        v[i] = 1./(v[i]*v[i]);
     }
     
-	for(i = 0; i < n123; i++) {
-	    slow = v[i];
-	    v[i] = 1./(slow*slow);
-	}
-    
-    if (!sweep) fastmarch_init (n3,n2,n1);
+    fastmarch_init (n3,n2,n1);
  
     /* loop over shots */
     nshot=1;
     for( is = 0; is < nshot; is++) {
-	if (sweep) {
-	    continue;
-	} else {
-	    fastmarch(t,v,p, plane,
+	fastmarch(t,v,p, plane,
 		      n3,n2,n1,
 		      o3,o2,o1,
 		      d3,d2,d1,
 		      s[is][2],s[is][1],s[is][0], 
 		      b3,b2,b1,
 		      order);
-	}	
     }
     
     /*Below is the output part*/
@@ -793,10 +785,10 @@ static PyObject *eikonalc_multishots(PyObject *self, PyObject *args){
 	PyArg_ParseTuple(args, "OOOOffffffiiii", &arg1, &f1, &f2, &f3, &f4, &f5, &f6, &f7, &f8, &f9, &f10, &f11, &f12, &f13);
 
     int b1, b2, b3, n1, n2, n3, nshot, ndim, i, is,order,n123, *p;
-    float br1, br2, br3, o1, o2, o3, d1, d2, d3, slow;
+    float br1, br2, br3, o1, o2, o3, d1, d2, d3;
     float **s, *t, *v;
     float *x, *y, *z;
-    bool isvel, sweep, plane[3];
+    bool plane[3];
     
 	o1=f4;
 	o2=f5;
@@ -824,7 +816,6 @@ static PyObject *eikonalc_multishots(PyObject *self, PyObject *args){
     npy_intp *spxyz=PyArray_SHAPE(arrf1);
     nshot=*spxyz;
 
-	sweep=false;
 	br1=d1;
 	br2=d2;
 	br3=d3;
@@ -863,9 +854,11 @@ static PyObject *eikonalc_multishots(PyObject *self, PyObject *args){
     	return NULL;
     }
     
-    for (i=0; i<*sp; i++)
+    /*reading velocity*/
+    for (i=0; i<n123; i++)
     {
         v[i]=*((float*)PyArray_GETPTR1(arr1,i));
+        v[i] = 1./(v[i]*v[i]);
     }
 
 	/*reading xyz*/
@@ -875,28 +868,19 @@ static PyObject *eikonalc_multishots(PyObject *self, PyObject *args){
         s[i][1]=*((float*)PyArray_GETPTR1(arrf2,i));
         s[i][2]=*((float*)PyArray_GETPTR1(arrf3,i));
     }
-    
-	for(i = 0; i < n123; i++) {
-	    slow = v[i];
-	    v[i] = 1./(slow*slow);
-	}
 	
-    if (!sweep) fastmarch_init (n3,n2,n1);
+    fastmarch_init (n3,n2,n1);
  
     /* loop over shots */
     for( is = 0; is < nshot; is++) {
 	printf("shot %d of %d;\n",is+1,nshot);
-	if (sweep) {
-	    continue;
-	} else {
-	    fastmarch(t+is*n123,v,p, plane,
+	fastmarch(t+is*n123,v,p, plane,
 		      n3,n2,n1,
 		      o3,o2,o1,
 		      d3,d2,d1,
 		      s[is][2],s[is][1],s[is][0], 
 		      b3,b2,b1,
 		      order);
-	}	
     }
     
     /*Below is the output part*/
@@ -935,10 +919,10 @@ static PyObject *eikonalc_surf(PyObject *self, PyObject *args){
 	PyArg_ParseTuple(args, "OOOOffffffiiii", &arg1, &f1, &f2, &f3, &f4, &f5, &f6, &f7, &f8, &f9, &f10, &f11, &f12, &f13);
 
     int b1, b2, b3, n1, n2, n3, nshot, ndim, i, is,order,n123, *p;
-    float br1, br2, br3, o1, o2, o3, d1, d2, d3, slow;
+    float br1, br2, br3, o1, o2, o3, d1, d2, d3;
     float **s, *t, *v;
     float *x, *y, *z;
-    bool isvel, sweep, plane[3];
+    bool plane[3];
     
 	o1=f4;
 	o2=f5;
@@ -966,7 +950,6 @@ static PyObject *eikonalc_surf(PyObject *self, PyObject *args){
     npy_intp *spxyz=PyArray_SHAPE(arrf1);
     nshot=*spxyz;
 
-	sweep=false;
 	br1=d1;
 	br2=d2;
 	br3=d3;
@@ -1005,9 +988,11 @@ static PyObject *eikonalc_surf(PyObject *self, PyObject *args){
     	return NULL;
     }
     
-    for (i=0; i<*sp; i++)
+    /*reading velocity*/
+    for (i=0; i<n123; i++)
     {
         v[i]=*((float*)PyArray_GETPTR1(arr1,i));
+        v[i] = 1./(v[i]*v[i]);
     }
 
 	/*reading xyz*/
@@ -1017,13 +1002,8 @@ static PyObject *eikonalc_surf(PyObject *self, PyObject *args){
         s[i][1]=*((float*)PyArray_GETPTR1(arrf2,i));
         s[i][2]=*((float*)PyArray_GETPTR1(arrf3,i));
     }
-
-	for(i = 0; i < n123; i++) {
-	    slow = v[i];
-	    v[i] = 1./(slow*slow);
-	}
 	
-    if (!sweep) fastmarch_init (n3,n2,n1);
+    fastmarch_init (n3,n2,n1);
  
     /* loop over shots */
     int i1,i2,i3;
@@ -1031,17 +1011,13 @@ static PyObject *eikonalc_surf(PyObject *self, PyObject *args){
     tt = (float*)malloc(n1*n2*nshot * sizeof(float)); /*nx*ny*nshot*/
     for( is = 0; is < nshot; is++) {
 	printf("shot %d of %d;\n",is+1,nshot);
-	if (sweep) {
-	    continue;
-	} else {
-	    fastmarch(t+is*n123,v,p, plane,
+	fastmarch(t+is*n123,v,p, plane,
 		      n3,n2,n1,
 		      o3,o2,o1,
 		      d3,d2,d1,
 		      s[is][2],s[is][1],s[is][0], 
 		      b3,b2,b1,
 		      order);
-	}	
 
 	for(i1=0;i1<n1;i1++) /*x*/
 		for(i2=0;i2<n2;i2++) /*y*/
