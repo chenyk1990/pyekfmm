@@ -8,7 +8,7 @@
     (http://www.gnu.org/copyleft/gpl.html)
 """
 
-__version__ = "0.0.5"
+__version__ = "0.0.6"
 
 from .fmm import eikonal
 from .fmm import eikonal_surf
