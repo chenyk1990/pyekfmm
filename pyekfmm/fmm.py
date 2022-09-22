@@ -105,13 +105,13 @@ def eikonal_rtp(vel,rtp,ar=[0,0.01,101],at=[0,1.8,101],ap=[0,3.6,101],order=2):
 		r=rtp[0];t=rtp[1];p=rtp[2];
 		times=eikonalc_oneshot_rtp(vel,r,t,p,ar[0],at[0],ap[0],ar[1],at[1],ap[1],ar[2],at[2],ap[2],order);
 	else:
-		from eikonalc import eikonalc_multishots
+		from eikonalc import eikonalc_multishots_rtp
 		[ne,ndim]=rtp.shape;#ndim must be 3
 		r=rtp[:,0];t=rtp[:,1];p=rtp[:,2];
 		r=np.expand_dims(r,1);
 		t=np.expand_dims(t,1);
 		p=np.expand_dims(p,1);
-		times=eikonalc_multishots(vel,r,t,p,ar[0],at[0],ap[0],ar[1],at[1],ap[1],ar[2],at[2],ap[2],order);
+		times=eikonalc_multishots_rtp(vel,r,t,p,ar[0],at[0],ap[0],ar[1],at[1],ap[1],ar[2],at[2],ap[2],order);
 		
 	return times
 	

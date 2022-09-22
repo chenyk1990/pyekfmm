@@ -633,8 +633,6 @@ void fastmarch_rtp (float* time                /* time */,
 	i = p - time;
 
 	in[i] = FMM_IN;
-	
-// 	printf("npoints=%d\n",npoints);
     }
 }
 
@@ -1062,7 +1060,7 @@ static PyObject *eikonalc_oneshot_rtp(PyObject *self, PyObject *args){
     float x, y, z;
     bool plane[3];
     
-	x=f1;
+	x=f1;		   /*r*/
 	y=f2/180*M_PI; /*t*/
 	z=f3/180*M_PI; /*p*/ 
 	
@@ -1080,7 +1078,6 @@ static PyObject *eikonalc_oneshot_rtp(PyObject *self, PyObject *args){
 	
 	order=f13;
 	
-// 	printf("PI=%g\n",M_PI);
     arr1 = PyArray_FROM_OTF(arg1, NPY_FLOAT, NPY_IN_ARRAY);
     /*
      * my code starts here
@@ -1164,6 +1161,139 @@ static PyObject *eikonalc_oneshot_rtp(PyObject *self, PyObject *args){
 	
 }
 
+static PyObject *eikonalc_multishots_rtp(PyObject *self, PyObject *args){
+
+    /*Below is the input part*/
+    float f4,f5,f6,f7,f8,f9;
+    int f10,f11,f12,f13;
+    
+	/**initialize data input**/
+    PyObject *arg1=NULL;
+    PyObject *arr1=NULL;
+    int nd, nd2;
+    
+    PyObject *f1=NULL;
+    PyObject *f2=NULL;
+    PyObject *f3=NULL;
+    PyObject *arrf1=NULL;
+    PyObject *arrf2=NULL;
+    PyObject *arrf3=NULL;
+
+	PyArg_ParseTuple(args, "OOOOffffffiiii", &arg1, &f1, &f2, &f3, &f4, &f5, &f6, &f7, &f8, &f9, &f10, &f11, &f12, &f13);
+
+    int b1, b2, b3, n1, n2, n3, nshot, ndim, i, is,order,n123, *p;
+    float br1, br2, br3, o1, o2, o3, d1, d2, d3;
+    float **s, *t, *v;
+    float *x, *y, *z;
+    bool plane[3];
+    
+	o1=f4;			/*r*/
+	o2=f5/180*M_PI; /*t*/
+	o3=f6/180*M_PI; /*p*/
+	 
+	d1=f7;
+	d2=f8/180*M_PI;
+	d3=f9/180*M_PI;
+	
+	n1=f10;
+	n2=f11;
+	n3=f12;
+	
+	order=f13;
+    
+    arr1 = PyArray_FROM_OTF(arg1, NPY_FLOAT, NPY_IN_ARRAY);
+    arrf1 = PyArray_FROM_OTF(f1, NPY_FLOAT, NPY_IN_ARRAY);
+    arrf2 = PyArray_FROM_OTF(f2, NPY_FLOAT, NPY_IN_ARRAY);
+    arrf3 = PyArray_FROM_OTF(f3, NPY_FLOAT, NPY_IN_ARRAY);
+
+    nd=PyArray_NDIM(arr1);
+    nd2=PyArray_NDIM(arrf1);
+    
+    npy_intp *sp=PyArray_SHAPE(arr1);
+    npy_intp *spxyz=PyArray_SHAPE(arrf1);
+    nshot=*spxyz;
+
+	br1=d1;
+	br2=d2;
+	br3=d3;
+	plane[2]=false;
+	plane[1]=false;
+	plane[0]=false;
+	b1= plane[2]? n1: (int) (br1/d1+0.5); 
+	b2= plane[1]? n2: (int) (br2/d2+0.5);
+	b3= plane[0]? n3: (int) (br3/d3+0.5); 
+
+
+    if( b1<1 ) b1=1;  
+    if( b2<1 ) b2=1;  
+    if( b3<1 ) b3=1;
+
+	ndim = 3; 
+    s = (float**)malloc(nshot * sizeof(float*));
+    for (int i = 0; i < nshot; i++)
+        s[i] = (float*)malloc(ndim * sizeof(float));
+	
+
+    n123 = n1*n2*n3;
+
+	t = (float*)malloc(n123*nshot * sizeof(float));
+	v = (float*)malloc(n123 * sizeof(float));
+	p = (float*)malloc(n123 * sizeof(float));
+
+	x = (float*)malloc(nshot * sizeof(float));
+	y = (float*)malloc(nshot * sizeof(float));
+	z = (float*)malloc(nshot * sizeof(float));
+
+
+    if (*sp != n123)
+    {
+    	printf("Dimension mismatch, N_input = %d, N_model = %d\n", *sp, n123);
+    	return NULL;
+    }
+    
+    /*reading velocity*/
+    for (i=0; i<n123; i++)
+    {
+        v[i]=*((float*)PyArray_GETPTR1(arr1,i));
+        v[i] = 1./(v[i]*v[i]);
+    }
+
+	/*reading xyz*/
+    for (i=0; i<nshot; i++)
+    {
+        s[i][0]=*((float*)PyArray_GETPTR1(arrf1,i));
+        s[i][1]=*((float*)PyArray_GETPTR1(arrf2,i))/180*M_PI;
+        s[i][2]=*((float*)PyArray_GETPTR1(arrf3,i))/180*M_PI;
+    }
+	
+    fastmarch_init (n3,n2,n1);
+ 
+    /* loop over shots */
+    for( is = 0; is < nshot; is++) {
+	printf("shot %d of %d;\n",is+1,nshot);
+	fastmarch_rtp(t+is*n123,v,p, plane,
+		      n3,n2,n1,
+		      o3,o2,o1,
+		      d3,d2,d1,
+		      s[is][2],s[is][1],s[is][0], 
+		      b3,b2,b1,
+		      order);
+    }
+    
+    /*Below is the output part*/
+    PyArrayObject *vecout;
+	npy_intp dims[2];
+	dims[0]=n1*n2*n3*nshot;dims[1]=1;
+	/* Parse tuples separately since args will differ between C fcns */
+	/* Make a new double vector of same dimension */
+	vecout=(PyArrayObject *) PyArray_SimpleNew(1,dims,NPY_FLOAT);
+	for(i=0;i<dims[0];i++)
+		(*((float*)PyArray_GETPTR1(vecout,i))) = t[i];
+	
+	return PyArray_Return(vecout);
+	
+}
+
 // documentation for each functions.
 static char eikonalc_document[] = "Document stuff for eikonal...";
 
@@ -1174,6 +1304,7 @@ static PyMethodDef functions[] = {
   {"eikonalc_multishots", eikonalc_multishots, METH_VARARGS, eikonalc_document},
   {"eikonalc_surf", eikonalc_surf, METH_VARARGS, eikonalc_document},
   {"eikonalc_oneshot_rtp", eikonalc_oneshot_rtp, METH_VARARGS, eikonalc_document},
+  {"eikonalc_multishots_rtp", eikonalc_multishots_rtp, METH_VARARGS, eikonalc_document},
   {NULL, NULL, 0, NULL}
 };
 

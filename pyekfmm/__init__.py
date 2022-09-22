@@ -8,13 +8,12 @@
     (http://www.gnu.org/copyleft/gpl.html)
 """
 
-__version__ = "0.0.6"
+__version__ = "0.0.8"
 
 from .fmm import eikonal
 from .fmm import eikonal_surf
 from .fmm import eikonal_rtp
 
-from calculator import * #This is a template for writing python-C APIs
 from eikonalc import *
 
 

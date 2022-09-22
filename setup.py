@@ -19,9 +19,6 @@ def read(*names, **kwargs):
 
 
 from distutils.core import Extension
-# defining calculator_module as an extension class instance.
-# 'calculator' is extension's name and sources is a file name list.
-calculator_module = Extension('calculator', sources=['pyekfmm/src/calculator.c'])
 
 eikonalc_module = Extension('eikonalc', sources=['pyekfmm/src/eikonal.c'])
 
@@ -35,7 +32,7 @@ setup(
     author="pyekfmm developing team",
     author_email="chenyk2016@gmail.com",
     url="https://github.com/chenyk1990/pyekfmm",
-    ext_modules=[calculator_module,eikonalc_module],
+    ext_modules=[eikonalc_module],
     packages=['pyekfmm'],
     include_package_data=True,
     zip_safe=False,
