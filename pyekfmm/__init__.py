@@ -12,6 +12,7 @@ __version__ = "0.0.6"
 
 from .fmm import eikonal
 from .fmm import eikonal_surf
+from .fmm import eikonal_rtp
 
 from calculator import * #This is a template for writing python-C APIs
 from eikonalc import *

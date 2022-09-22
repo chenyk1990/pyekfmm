@@ -73,3 +73,46 @@ def eikonal_surf(vel,xyz,ax=[0,0.01,101],ay=[0,0.01,101],az=[0,0.01,101],order=2
 		
 	return times
 	
+def eikonal_rtp(vel,rtp,ar=[0,0.01,101],at=[0,1.8,101],ap=[0,3.6,101],order=2):
+	'''
+	EIKONAL_RTP: Fast marching eikonal solver (3-D) in spherical coordinates
+	
+	INPUT
+	vel: 1D numpy array (nx*ny*nz)
+	rtp: 1D/2D numpy array (one event: 1x3 or multi-event: ne x 3)
+	ar: axis r [or,dr,nr]
+	at: axis theta [ot,dt,nt]
+	ap: axis phi [op,dp,np]
+	order: accuracy order [1 or 2]
+	
+	OUTPUT
+	times: traveltime in xyz respectively (1D numpy array)
+		   (one event: nx*ny*nz or multi-event: nx*ny*nz*ne)
+	
+	EXAMPLE
+	demos/test_first-fifth.py
+	
+	COPYRIGHT
+	Yangkang Chen, 2022, The University of Texas at Austin
+	
+	MODIFICATIONS
+	[1] By Yangkang Chen, Sep, 2022
+	
+	'''
+	import numpy as np
+	if rtp.size == 3:
+		from eikonalc import eikonalc_oneshot_rtp
+		r=rtp[0];t=rtp[1];p=rtp[2];
+		times=eikonalc_oneshot_rtp(vel,r,t,p,ar[0],at[0],ap[0],ar[1],at[1],ap[1],ar[2],at[2],ap[2],order);
+	else:
+		from eikonalc import eikonalc_multishots
+		[ne,ndim]=rtp.shape;#ndim must be 3
+		r=rtp[:,0];t=rtp[:,1];p=rtp[:,2];
+		r=np.expand_dims(r,1);
+		t=np.expand_dims(t,1);
+		p=np.expand_dims(p,1);
+		times=eikonalc_multishots(vel,r,t,p,ar[0],at[0],ap[0],ar[1],at[1],ap[1],ar[2],at[2],ap[2],order);
+		
+	return times
+	
+	
