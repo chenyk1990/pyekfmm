@@ -66,7 +66,7 @@ vel=vel.reshape([numr*numt*nump,1],order='F');
 t=fmm.eikonal_rtp(vel,rtp=np.array([endr-evdp,evla,evlo]),ar=[begr,dr,numr],at=[begt,dt,numt],ap=[begp,dp,nump],order=2);#spherical needs order=1
 time=t.reshape(numr,numt,nump,order='F'); #[r,t,p]
 print('P arrival time:',time[irst,itst,ipst])
-print('Correct arrival time:',1.5274389)
+# print('Correct arrival time:',1.5274389)
 
 
 import matplotlib.pyplot as plt
@@ -94,7 +94,7 @@ tc=fmm.eikonal(vel,xyz=np.array([evla*111.1949,evlo*111.1949,evdp]),ax=[begt*111
 timec=tc.reshape(numt,nump,numr,order='F'); #[x,y,z]
 
 print('Cartesian P arrival time:',timec[0,nump-1,0])
-print('Correct P arrival time:',1.5274389)
+# print('Correct P arrival time:',1.5274389)
 
 
 
