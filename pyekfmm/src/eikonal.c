@@ -768,7 +768,7 @@ static PyObject *eikonalc_multishots(PyObject *self, PyObject *args){
 
     /*Below is the input part*/
     float f4,f5,f6,f7,f8,f9;
-    int f10,f11,f12,f13;
+    int f10,f11,f12,f13,f14;
     
 	/**initialize data input**/
     PyObject *arg1=NULL;
@@ -782,9 +782,9 @@ static PyObject *eikonalc_multishots(PyObject *self, PyObject *args){
     PyObject *arrf2=NULL;
     PyObject *arrf3=NULL;
 
-	PyArg_ParseTuple(args, "OOOOffffffiiii", &arg1, &f1, &f2, &f3, &f4, &f5, &f6, &f7, &f8, &f9, &f10, &f11, &f12, &f13);
+	PyArg_ParseTuple(args, "OOOOffffffiiiii", &arg1, &f1, &f2, &f3, &f4, &f5, &f6, &f7, &f8, &f9, &f10, &f11, &f12, &f13, &f14);
 
-    int b1, b2, b3, n1, n2, n3, nshot, ndim, i, is,order,n123, *p;
+    int b1, b2, b3, n1, n2, n3, nshot, ndim, i, is,order,n123, *p, verb;
     float br1, br2, br3, o1, o2, o3, d1, d2, d3;
     float **s, *t, *v;
     float *x, *y, *z;
@@ -803,6 +803,7 @@ static PyObject *eikonalc_multishots(PyObject *self, PyObject *args){
 	n3=f12;
 	
 	order=f13;
+	verb=f14; /*verbosity*/
     
     arr1 = PyArray_FROM_OTF(arg1, NPY_FLOAT, NPY_IN_ARRAY);
     arrf1 = PyArray_FROM_OTF(f1, NPY_FLOAT, NPY_IN_ARRAY);
@@ -873,7 +874,7 @@ static PyObject *eikonalc_multishots(PyObject *self, PyObject *args){
  
     /* loop over shots */
     for( is = 0; is < nshot; is++) {
-	printf("shot %d of %d;\n",is+1,nshot);
+	if(verb) printf("shot %d of %d;\n",is+1,nshot);
 	fastmarch(t+is*n123,v,p, plane,
 		      n3,n2,n1,
 		      o3,o2,o1,
@@ -902,7 +903,7 @@ static PyObject *eikonalc_surf(PyObject *self, PyObject *args){
 
     /*Below is the input part*/
     float f4,f5,f6,f7,f8,f9;
-    int f10,f11,f12,f13;
+    int f10,f11,f12,f13,f14;
     
 	/**initialize data input**/
     PyObject *arg1=NULL;
@@ -916,9 +917,9 @@ static PyObject *eikonalc_surf(PyObject *self, PyObject *args){
     PyObject *arrf2=NULL;
     PyObject *arrf3=NULL;
 
-	PyArg_ParseTuple(args, "OOOOffffffiiii", &arg1, &f1, &f2, &f3, &f4, &f5, &f6, &f7, &f8, &f9, &f10, &f11, &f12, &f13);
+	PyArg_ParseTuple(args, "OOOOffffffiiiii", &arg1, &f1, &f2, &f3, &f4, &f5, &f6, &f7, &f8, &f9, &f10, &f11, &f12, &f13,&f14);
 
-    int b1, b2, b3, n1, n2, n3, nshot, ndim, i, is,order,n123, *p;
+    int b1, b2, b3, n1, n2, n3, nshot, ndim, i, is,order,n123, *p, verb;
     float br1, br2, br3, o1, o2, o3, d1, d2, d3;
     float **s, *t, *v;
     float *x, *y, *z;
@@ -937,6 +938,7 @@ static PyObject *eikonalc_surf(PyObject *self, PyObject *args){
 	n3=f12;
 	
 	order=f13;
+	verb=f14;
     
     arr1 = PyArray_FROM_OTF(arg1, NPY_FLOAT, NPY_IN_ARRAY);
     arrf1 = PyArray_FROM_OTF(f1, NPY_FLOAT, NPY_IN_ARRAY);
@@ -1009,7 +1011,7 @@ static PyObject *eikonalc_surf(PyObject *self, PyObject *args){
     float *tt;
     tt = (float*)malloc(n1*n2*nshot * sizeof(float)); /*nx*ny*nshot*/
     for( is = 0; is < nshot; is++) {
-	printf("shot %d of %d;\n",is+1,nshot);
+	if(verb) printf("shot %d of %d;\n",is+1,nshot);
 	fastmarch(t+is*n123,v,p, plane,
 		      n3,n2,n1,
 		      o3,o2,o1,
@@ -1165,7 +1167,7 @@ static PyObject *eikonalc_multishots_rtp(PyObject *self, PyObject *args){
 
     /*Below is the input part*/
     float f4,f5,f6,f7,f8,f9;
-    int f10,f11,f12,f13;
+    int f10,f11,f12,f13,f14;
     
 	/**initialize data input**/
     PyObject *arg1=NULL;
@@ -1179,9 +1181,9 @@ static PyObject *eikonalc_multishots_rtp(PyObject *self, PyObject *args){
     PyObject *arrf2=NULL;
     PyObject *arrf3=NULL;
 
-	PyArg_ParseTuple(args, "OOOOffffffiiii", &arg1, &f1, &f2, &f3, &f4, &f5, &f6, &f7, &f8, &f9, &f10, &f11, &f12, &f13);
+	PyArg_ParseTuple(args, "OOOOffffffiiiii", &arg1, &f1, &f2, &f3, &f4, &f5, &f6, &f7, &f8, &f9, &f10, &f11, &f12, &f13,&f14);
 
-    int b1, b2, b3, n1, n2, n3, nshot, ndim, i, is,order,n123, *p;
+    int b1, b2, b3, n1, n2, n3, nshot, ndim, i, is,order,n123, *p, verb;
     float br1, br2, br3, o1, o2, o3, d1, d2, d3;
     float **s, *t, *v;
     float *x, *y, *z;
@@ -1200,6 +1202,7 @@ static PyObject *eikonalc_multishots_rtp(PyObject *self, PyObject *args){
 	n3=f12;
 	
 	order=f13;
+	verb=f14;
     
     arr1 = PyArray_FROM_OTF(arg1, NPY_FLOAT, NPY_IN_ARRAY);
     arrf1 = PyArray_FROM_OTF(f1, NPY_FLOAT, NPY_IN_ARRAY);
@@ -1270,7 +1273,7 @@ static PyObject *eikonalc_multishots_rtp(PyObject *self, PyObject *args){
  
     /* loop over shots */
     for( is = 0; is < nshot; is++) {
-	printf("shot %d of %d;\n",is+1,nshot);
+	if(verb) printf("shot %d of %d;\n",is+1,nshot);
 	fastmarch_rtp(t+is*n123,v,p, plane,
 		      n3,n2,n1,
 		      o3,o2,o1,

@@ -1,4 +1,4 @@
-def eikonal(vel,xyz,ax=[0,0.01,101],ay=[0,0.01,101],az=[0,0.01,101],order=2):
+def eikonal(vel,xyz,ax=[0,0.01,101],ay=[0,0.01,101],az=[0,0.01,101],order=2,verb=1):
 	'''
 	EIKONAL: Fast marching eikonal solver (3-D)
 	
@@ -36,12 +36,12 @@ def eikonal(vel,xyz,ax=[0,0.01,101],ay=[0,0.01,101],az=[0,0.01,101],order=2):
 		x=np.expand_dims(x,1);
 		y=np.expand_dims(y,1);
 		z=np.expand_dims(z,1);
-		times=eikonalc_multishots(vel,x,y,z,ax[0],ay[0],az[0],ax[1],ay[1],az[1],ax[2],ay[2],az[2],order);
+		times=eikonalc_multishots(vel,x,y,z,ax[0],ay[0],az[0],ax[1],ay[1],az[1],ax[2],ay[2],az[2],order,verb);
 		
 	return times
 	
 	
-def eikonal_surf(vel,xyz,ax=[0,0.01,101],ay=[0,0.01,101],az=[0,0.01,101],order=2):
+def eikonal_surf(vel,xyz,ax=[0,0.01,101],ay=[0,0.01,101],az=[0,0.01,101],order=2,verb=1):
 	'''
 	EIKONAL_SURF: Fast marching eikonal solver (3-D) and recording the traveltimes on the surface.
 	
@@ -69,11 +69,11 @@ def eikonal_surf(vel,xyz,ax=[0,0.01,101],ay=[0,0.01,101],az=[0,0.01,101],order=2
 	from eikonalc import eikonalc_surf
 	[ne,ndim]=xyz.shape;#ndim must be 3
 	x=xyz[:,0];y=xyz[:,1];z=xyz[:,2];
-	times=eikonalc_surf(vel,x,y,z,ax[0],ay[0],az[0],ax[1],ay[1],az[1],ax[2],ay[2],az[2],order);
+	times=eikonalc_surf(vel,x,y,z,ax[0],ay[0],az[0],ax[1],ay[1],az[1],ax[2],ay[2],az[2],order,verb);
 		
 	return times
 	
-def eikonal_rtp(vel,rtp,ar=[0,0.01,101],at=[0,1.8,101],ap=[0,3.6,101],order=2):
+def eikonal_rtp(vel,rtp,ar=[0,0.01,101],at=[0,1.8,101],ap=[0,3.6,101],order=2,verb=1):
 	'''
 	EIKONAL_RTP: Fast marching eikonal solver (3-D) in spherical coordinates
 	
@@ -111,7 +111,7 @@ def eikonal_rtp(vel,rtp,ar=[0,0.01,101],at=[0,1.8,101],ap=[0,3.6,101],order=2):
 		r=np.expand_dims(r,1);
 		t=np.expand_dims(t,1);
 		p=np.expand_dims(p,1);
-		times=eikonalc_multishots_rtp(vel,r,t,p,ar[0],at[0],ap[0],ar[1],at[1],ap[1],ar[2],at[2],ap[2],order);
+		times=eikonalc_multishots_rtp(vel,r,t,p,ar[0],at[0],ap[0],ar[1],at[1],ap[1],ar[2],at[2],ap[2],order,verb);
 		
 	return times
 	
