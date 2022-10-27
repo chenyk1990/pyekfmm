@@ -1,4 +1,4 @@
-def eikonal(vel,xyz,ax=[0,0.01,101],ay=[0,0.01,101],az=[0,0.01,101],order=2,verb=1):
+def eikonal(vel,xyz,ax=[0,0.01,101],ay=[0,0.01,101],az=[0,0.01,101],order=2,verb=1,angle=False):
 	'''
 	EIKONAL: Fast marching eikonal solver (3-D)
 	
@@ -28,7 +28,16 @@ def eikonal(vel,xyz,ax=[0,0.01,101],ay=[0,0.01,101],az=[0,0.01,101],order=2,verb
 	if xyz.size == 3:
 		from eikonalc import eikonalc_oneshot
 		x=xyz[0];y=xyz[1];z=xyz[2];
-		times=eikonalc_oneshot(vel,x,y,z,ax[0],ay[0],az[0],ax[1],ay[1],az[1],ax[2],ay[2],az[2],order);
+		if angle:
+			
+			from eikonalc import eikonalc_oneshot_angle
+			n123=vel.size
+			tmp=eikonalc_oneshot_angle(vel,x,y,z,ax[0],ay[0],az[0],ax[1],ay[1],az[1],ax[2],ay[2],az[2],order);
+			times=tmp[0:n123]
+			dips=tmp[n123:n123*2]
+			azims=tmp[n123*2:]
+		else:
+			times=eikonalc_oneshot(vel,x,y,z,ax[0],ay[0],az[0],ax[1],ay[1],az[1],ax[2],ay[2],az[2],order);
 	else:
 		from eikonalc import eikonalc_multishots
 		[ne,ndim]=xyz.shape;#ndim must be 3
@@ -36,9 +45,22 @@ def eikonal(vel,xyz,ax=[0,0.01,101],ay=[0,0.01,101],az=[0,0.01,101],order=2,verb
 		x=np.expand_dims(x,1);
 		y=np.expand_dims(y,1);
 		z=np.expand_dims(z,1);
-		times=eikonalc_multishots(vel,x,y,z,ax[0],ay[0],az[0],ax[1],ay[1],az[1],ax[2],ay[2],az[2],order,verb);
 		
-	return times
+		if angle:
+			from eikonalc import eikonalc_multishots_angle
+			n123=vel.size
+			tmp=eikonalc_multishots_angle(vel,x,y,z,ax[0],ay[0],az[0],ax[1],ay[1],az[1],ax[2],ay[2],az[2],order,verb);
+			times=tmp[0:n123*ne]
+			dips=tmp[n123*ne:n123*ne*2]
+			azims=tmp[n123*ne*2:]
+			
+		else:
+			times=eikonalc_multishots(vel,x,y,z,ax[0],ay[0],az[0],ax[1],ay[1],az[1],ax[2],ay[2],az[2],order,verb);
+	
+	if angle:
+		return times,dips,azims
+	else:
+		return times
 	
 	
 def eikonal_surf(vel,xyz,ax=[0,0.01,101],ay=[0,0.01,101],az=[0,0.01,101],order=2,verb=1):
