@@ -72,4 +72,6 @@ Each figure in the gallery directory corresponds to a DEMO script in the "demo" 
 
 These gallery figures are also presented below. 
 
-<img src='https://github.com/chenyk1990/gallery/tree/main/pyekfmm/test_1_constv.png' alt='DEMO1' width=600/>
+DEMO1 (test_1_constv.m)
+
+<img src='https://github.com/chenyk1990/gallery/blob/main/pyekfmm/test_1_constv.png' alt='DEMO1' width=960/>
