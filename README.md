@@ -46,12 +46,6 @@ or using Pypi
 -----------
 ## Examples
     The "demo" directory contains all runable scripts to demonstrate different applications of pyekfmm. 
-    
------------
-## Gallery
-The gallery figures of the pyekfmm package can be found at
-    https://github.com/chenyk1990/gallery/tree/main/pyekfmm
-Each figure in the gallery directory corresponds to a DEMO script in the "demo" directory with the exactly the same file name.
 
 -----------
 ## Dependence Packages
@@ -71,5 +65,13 @@ Each figure in the gallery directory corresponds to a DEMO script in the "demo" 
     chenyk2016@gmail.com
 
 -----------
+## Gallery
+The gallery figures of the pyekfmm package can be found at
+    https://github.com/chenyk1990/gallery/tree/main/pyekfmm
+Each figure in the gallery directory corresponds to a DEMO script in the "demo" directory with the exactly the same file name.
 
+These gallery figures are also presented below. 
+
+DEMO 1 (test_1_constv.m)
+<img src='https://github.com/chenyk1990/gallery/tree/main/pyekfmm/test_1_constv.png' alt='Slicing' width=960/>
 
