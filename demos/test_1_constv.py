@@ -11,10 +11,12 @@ time=t.reshape(501,501,order='F');#first axis (vertical) is x, second is z
 
 
 import matplotlib.pyplot as plt
-plt.imshow(time.transpose()); #transpose so that first axis is z, second is x
-plt.xlabel('X');plt.ylabel('Z');
+plt.imshow(time.transpose(),cmap=plt.cm.jet, interpolation='none', extent=[0,5,5,0]); #transpose so that first axis is z, second is x
+plt.plot(2.5,0.08,'*r',markersize=10)
+plt.xlabel('X (km)');plt.ylabel('Z (km)');
 plt.jet()
-plt.colorbar(orientation='horizontal',shrink=0.6);
+plt.colorbar(orientation='horizontal',shrink=0.6,label='Traveltime (s)');
+plt.savefig('test_1_constv.png',format='png',dpi=300,bbox_inches='tight', pad_inches=0)
 plt.show()
 
 ## Verify
