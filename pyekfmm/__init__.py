@@ -14,8 +14,12 @@ from .fmm import eikonal
 from .fmm import eikonal_surf
 from .fmm import eikonal_rtp
 
-from eikonalc import *
+from .fmmvti import eikonalvti
+from .fmmvti import eikonalvti_surf
+from .fmmvti import eikonalvti_rtp
 
+from eikonalc import *
+from eikonalvtic import *
 
 
 
