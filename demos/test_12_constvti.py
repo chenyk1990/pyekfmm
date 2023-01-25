@@ -16,7 +16,10 @@ time=t.reshape(201,201,order='F');#first axis (vertical) is x, second is z
 
 
 import matplotlib.pyplot as plt
-plt.imshow(time.transpose(),cmap=plt.cm.jet, interpolation='none', extent=[0,10,10,0]); #transpose so that first axis is z, second is x
+fig = plt.figure(figsize=(8, 8))
+ax = fig.add_subplot(111,aspect=1.0)
+# plt.imshow(time.transpose(),cmap=plt.cm.jet, interpolation='none', extent=[0,10,10,0]); #transpose so that first axis is z, second is x
+plt.contour(time.transpose(),extent=[0,10,10,0])
 plt.plot(5,5,'*r',markersize=10)
 plt.xlabel('X (km)');plt.ylabel('Z (km)');
 plt.jet()

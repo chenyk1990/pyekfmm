@@ -23,3 +23,8 @@ plt.show()
 print(['Testing result:',time.max(),time.min(),time.std(),time.var()])
 print(['Correct result:',1.8627454, 0.0, 0.42475563, 0.18041734])
 
+
+## for other usage
+time=np.float32(time)
+fid = open ("time.bin", "wb") #binary file format, int
+fid.write(time.flatten(order='F'))
