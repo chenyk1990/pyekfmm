@@ -80,6 +80,6 @@ DEMO 12 (traveltime calculation for VTI media)
 <img src='https://github.com/chenyk1990/gallery/blob/main/pyekfmm/test_12_constvti.png' alt='DEMO1' width=960/>
 
 DEMO 13 (traveltime calculation in 3D) 
-<img src='https://github.com/chenyk1990/gallery/blob/main/pyekfmm/test_13_3dplot.png' alt='DEMO1' width=960/>
+<img src='https://github.com/chenyk1990/gallery/blob/main/pyekfmm/test_13_plot3d.png' alt='DEMO1' width=960/>
 
 
