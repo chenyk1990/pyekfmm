@@ -14,17 +14,32 @@ eta=0.340859*np.ones([201*201,1],dtype='float32'); #velocity axis must be x,y,z 
 t=fmm.eikonalvti(velx,velz,eta,xyz=np.array([5,0,5]),ax=[0,0.05,201],ay=[0,0.05,1],az=[0,0.05,201],order=2);
 time=t.reshape(201,201,order='F');#first axis (vertical) is x, second is z
 
+## Isotropic case
+t=fmm.eikonal(velz,xyz=np.array([5,0,5]),ax=[0,0.05,201],ay=[0,0.05,1],az=[0,0.05,201],order=2);
+time0=t.reshape(201,201,order='F');#first axis (vertical) is x, second is z
 
 import matplotlib.pyplot as plt
-fig = plt.figure(figsize=(8, 8))
-ax = fig.add_subplot(111,aspect=1.0)
+fig = plt.figure(figsize=(16, 8))
+ax = fig.add_subplot(121,aspect=1.0)
 # plt.imshow(time.transpose(),cmap=plt.cm.jet, interpolation='none', extent=[0,10,10,0]); #transpose so that first axis is z, second is x
-plt.contour(time.transpose(),extent=[0,10,10,0])
+plt.contour(time0.transpose(),np.arange(10)*0.2,extent=[0,10,10,0])
 plt.plot(5,5,'*r',markersize=10)
 plt.xlabel('X (km)');plt.ylabel('Z (km)');
 plt.jet()
-plt.colorbar(orientation='horizontal',shrink=0.6,label='Traveltime (s)');
+plt.text(-1.5, 10.5, 'a)', fontsize=24)
+
+ax = fig.add_subplot(122,aspect=1.0)
+plt.contour(time.transpose(),np.arange(10)*0.2,extent=[0,10,10,0])
+plt.plot(5,5,'*r',markersize=10)
+plt.xlabel('X (km)');plt.ylabel('Z (km)');
+plt.jet()
+plt.text(-1.5, 10.5, 'b)', fontsize=24)
+
+plt.colorbar(orientation='horizontal',cax=fig.add_axes([0.37,0.07,0.3,0.02]),shrink=1,label='Traveltime (s)');
+
+
 plt.savefig('test_12_constvti.png',format='png',dpi=300,bbox_inches='tight', pad_inches=0)
+plt.savefig('test_12_constvti.pdf',format='pdf',dpi=300,bbox_inches='tight', pad_inches=0)
 plt.show()
 
 ## Verify

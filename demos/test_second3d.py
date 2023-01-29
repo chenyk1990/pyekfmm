@@ -64,4 +64,4 @@ def plot_3D_array_slices(array):
 
 n_pts = 100
 r_square = (np.mgrid[-1:1:1j*n_pts, -1:1:1j*n_pts, -1:1:1j*n_pts]**2).sum(0)
-plot_3D_array_slices(r_square)
+plot_3D_array_slices(time)

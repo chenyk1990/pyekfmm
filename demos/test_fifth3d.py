@@ -5,6 +5,8 @@
 
 import pyekfmm as fmm
 import numpy as np
+import time
+
 
 z=np.linspace(0,2,201);
 v=1.5+0.2*z;
@@ -21,7 +23,10 @@ shot2=np.array([0.5,0,0],dtype='float32');
 shot3=np.array([1.0,0,0],dtype='float32');
 shots=np.concatenate([shot1,shot2,shot3],axis=0).reshape(3,3)
 
+tic = time.perf_counter()
 t=fmm.eikonal(vel,xyz=shot1,ax=[0,0.01,201],ay=[0,0.01,201],az=[0,0.01,201],order=2);
+toc = time.perf_counter()
+print(f"C version takes {toc - tic:0.4f} seconds");
 time=t.reshape(201,201,201,1,order='F'); #[x,y,z]
 
 import matplotlib.pyplot as plt
