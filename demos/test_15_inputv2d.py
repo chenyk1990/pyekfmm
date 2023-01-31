@@ -80,6 +80,7 @@ plt.jet()
 plt.colorbar(orientation='horizontal',shrink=0.6,label='Velocity (km/s)');
 # plot the ray
 plt.plot((paths[0,:]-1)*dx/deg2km+x0/deg2km,(paths[1,:]-1)*dz/deg2km+z0/deg2km,'g--',markersize=20);
+plt.gca().invert_yaxis()
 
 ax=plt.subplot(1,2,2)
 plt.imshow(time,cmap=plt.cm.jet, interpolation='none', extent=[x0/deg2km,xm/deg2km,zm/deg2km,z0/deg2km]);
@@ -90,6 +91,6 @@ plt.jet()
 plt.colorbar(orientation='horizontal',shrink=0.6,label='Traveltime (s)');
 # plot the ray
 plt.plot((paths[0,:]-1)*dx/deg2km+x0/deg2km,(paths[1,:]-1)*dz/deg2km+z0/deg2km,'g--',markersize=20);
-
+plt.gca().invert_yaxis()
 plt.savefig('test_15_inputv2d.png',format='png',dpi=300,bbox_inches='tight', pad_inches=0)
 plt.show()
