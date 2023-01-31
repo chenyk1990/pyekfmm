@@ -23,6 +23,11 @@ from eikonalvtic import *
 
 
 
+from .stream import stream2d
+from .stream import trimrays
+
+
+
 
 
 

@@ -1,4 +1,5 @@
 clc;close all;clear;
+addpath(genpath('/Users/chenyk/Downloads/toolbox_fast_marching/toolbox_fast_marching'));
 
 fid=fopen('time_vgrad.bin','r');
 
@@ -122,5 +123,30 @@ end
 end
 
 % print(gcf,'-dpng','-r300','test1.png');
+
+figure;imagesc(t);colormap(jet);hold on;plot(1,1,'rp','markersize',20,'markerfacecolor','r');
+
+z=[1:50:501];
+end_points=[z;500*ones(size(z))];
+paths = compute_geodesic(t,end_points);
+for ii=1:length(paths)
+plot(paths{ii}(2,:),paths{ii}(1,:),'g--','linewidth',2);
+end
+
+
+%% my version
+[tx,tz]=gradient(t);
+
+figure;imagesc(t);colormap(jet);hold on;plot(1,1,'rp','markersize',20,'markerfacecolor','r');
+for ii=1:50:501
+path2 = yc_stream3c(-tx,-tz,500,ii,10,1000)';
+
+plot(path2(:,1),path2(:,2),'g--','linewidth',2);
+end
+
+
+
+
+
 
 

@@ -74,3 +74,31 @@ while norm(s-rr)>=1
 end
 
 
+%%
+addpath(genpath('/Users/chenyk/Downloads/toolbox_fast_marching/toolbox_fast_marching'));
+
+figure;
+frames=[1,101,1];
+yc_mada3d(d,frames,1:101,1:101,1:101);colormap(jet);caxis([0,0.5]);alpha(0.5);
+
+hold on;
+plot3(51,1,1,'rp','markersize',20,'markerfacecolor','r');
+
+s=[1,51,1];%z,x,y
+r=[75,10.2,75];
+plot3(r(1),r(2),r(3),'bv','markersize',20,'markerfacecolor','b');
+
+
+z=[1:50:501];
+end_points=[r(3);r(1);r(2)]; %z,x,y in endpoints
+paths = compute_geodesic(t,end_points);%z,x,y in paths | z,x,y in t
+plot3(paths(2,:),paths(3,:),paths(1,:),'g--','linewidth',2);
+
+
+% for ii=1:length(paths)
+% plot(paths{ii}(3,:),paths{ii}(2,:),paths{ii}(1,:),'g--','linewidth',2);
+% end
+
+
+
+
