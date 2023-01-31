@@ -82,4 +82,6 @@ DEMO 12 (traveltime calculation for VTI media)
 DEMO 13 (traveltime calculation in 3D) 
 <img src='https://github.com/chenyk1990/gallery/blob/main/pyekfmm/test_13_plot3d_new.png' alt='DEMO1' width=960/>
 
+DEMO (Ray tracing in 3D) 
+<img src='https://github.com/chenyk1990/gallery/blob/main/pyekfmm/test_1_vgrad_ray.png' alt='DEMO1' width=960/>
 
