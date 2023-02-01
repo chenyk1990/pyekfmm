@@ -30,8 +30,10 @@ print(f"C version takes {toc - tic:0.4f} seconds");
 time=t.reshape(201,201,201,1,order='F'); #[x,y,z]
 
 import matplotlib.pyplot as plt
-plt.imshow(time[:,50,:,0].transpose()); #xyz->xz, transpose so that first axis is z, second is x
-plt.xlabel('X');plt.ylabel('Z');
+#xyz->xz, transpose so that first axis is z, second is x
+plt.imshow(time[:,50,:,0].transpose(),cmap=plt.cm.jet, interpolation='none', extent=[0,2,2,0]); #transpose so that first axis is z, second is x
+plt.plot(0.0,0.0,'*r',markersize=20)
+plt.xlabel('X (km)');plt.ylabel('Z (km)');
 plt.jet()
 plt.colorbar(orientation='horizontal',shrink=0.6);
 plt.show()

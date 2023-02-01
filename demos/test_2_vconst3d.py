@@ -24,7 +24,7 @@ print(['Testing result:',time.max(),time.min(),time.std(),time.var()])
 print(['Correct result:',0.49965078, 0.0, 0.08905013, 0.007929926])
 
 
-
+## not working well
 import matplotlib.pyplot as plt
 import numpy as np
 from mpl_toolkits.mplot3d import Axes3D
