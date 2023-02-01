@@ -63,7 +63,7 @@ vel=vel.reshape([numr*numt*nump,1],order='F');
 # vel=3*np.ones([numr*numt*nump,1],dtype='float32');
 ## construct 3D velocity model
 
-t=fmm.eikonal_rtp(vel,rtp=np.array([endr-evdp,evla,evlo]),ar=[begr,dr,numr],at=[begt,dt,numt],ap=[begp,dp,nump],order=2);#spherical needs order=1
+t=fmm.eikonal_rtp(vel,rtp=np.array([endr-evdp,evla+90,evlo+180]),ar=[begr,dr,numr],at=[begt+90,dt,numt],ap=[begp+180,dp,nump],order=2);#spherical needs order=1
 time=t.reshape(numr,numt,nump,order='F'); #[r,t,p]
 print('P arrival time:',time[irst,itst,ipst])
 # print('Correct arrival time:',1.5274389)

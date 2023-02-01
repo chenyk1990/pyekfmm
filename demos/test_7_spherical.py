@@ -35,7 +35,7 @@ dp=(endp-begp)/nump
 
 
 vel=6.0*np.ones([numr*numt*nump,1],dtype='float32');
-t=fmm.eikonal_rtp(vel,rtp=np.array([6400-evdep,evlat,evlon]),ar=[begr,dr,numr],at=[begt,dt,numt],ap=[begp,dp,nump],order=1);#spherical needs order=1
+t=fmm.eikonal_rtp(vel,rtp=np.array([6400-evdep,evlat+90,evlon+180]),ar=[begr,dr,numr],at=[begt+90,dt,numt],ap=[begp+180,dp,nump],order=2);#spherical needs order=1
 time=t.reshape(numr,numt,nump,order='F'); #[r,t,p]
 
 import matplotlib.pyplot as plt
@@ -50,8 +50,8 @@ plt.show()
 
 ## Verify
 print(['Testing result:',time.max(),time.min(),time.std(),time.var()])
-print(['Correct result:',286.06723, 0.016649984, 75.647644, 5722.5664])
-#print(['Correct result:',285.1792, 0.016649984, 75.70713, 5731.57]) #If using order=2
-
+print(['Correct result:',300.6519, 0.016650287, 71.614296, 5128.608])
+#print(['Correct result:',300.6519, 0.016650287, 71.614296, 5128.608]) #If using order=2
+#['Testing result:', 302.19653, 0.016650287, 71.644966, 5133.001]  #If using order=1
 
 
