@@ -100,7 +100,7 @@ def traceStreamUV (ugrid, vgrid, xdim, ydim, sx, sy, step, maxvert):
 		if numverts>=2:
 			if verts[2*numverts] == verts[2*(numverts-2)] and verts[2*numverts+1] == verts[2*(numverts-2)+1]:
 				numverts=numverts+1;
-				print("Second break");
+# 				print("Second break");
 				break;
 		
 		numverts=numverts+1;
