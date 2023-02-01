@@ -6,24 +6,30 @@ import pyekfmm as fmm
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.interpolate import RectBivariateSpline
+from obspy.geodetics.base import locations2degrees  
 
 ## download this model from 
 # https://github.com/aaspip/data/blob/main/vsmooth5063.bin
 
 ## input parameter (please note the axis sequence, input: zx or zxy)
-file_time='./vsmooth5063.bin'
-fd = open(file_time,'rb')
-vel = np.fromfile(fd, dtype = np.float32).reshape([50,63],order='F')    #[zxy]
+# file_time='./vsmooth2131.bin'
+# fd = open(file_time,'rb')
+# vel = np.fromfile(fd, dtype = np.float32).reshape([21,31],order='F')    #[zxy]
+ddx=0.025;
+ddz=0.025;
+nx=int((0.25/ddx)*30+1);
+nz=int((0.25/ddz)*20+1);
+vel = np.ones((nz,nx),dtype = np.float32)*3.
 vel1d=vel.transpose().flatten(order='F');#first axis (vertical) is x, second is z, required by pyekfmm
 
 ## specify parameters
 deg2km=6371*2*np.pi/360.0
-x0=109*deg2km;
-dx=0.75*deg2km;
-z0=-46*deg2km;
-dz=0.75*deg2km;
-nx=63;
-nz=50;
+x0=119*deg2km;
+dx=ddx*deg2km;
+z0=-35*deg2km;
+dz=ddz*deg2km;
+# nx=31;
+# nz=21;
 
 x=[(x0+i*dx) for i in range(nx)]
 z=[(z0+i*dz) for i in range(nz)]
@@ -34,13 +40,14 @@ xm=x0+dx*nx;
 zm=z0+dz*nz;
 
 ## Read in event and station locations
-pairs = np.loadtxt('travel_time.dat')
-fid=open('raypath.dat','w')
-fid1=open('travel_time_syn.dat','w')
-tt_pred =[]
-tt_obs = []
-
+pairs = np.loadtxt('travel_time_AL.dat')
+fid=open('raypath_AL.dat','w')
+fid1=open('travel_time_syn_AL.dat','w')
+distance=[]
+travel_time=[]
+# for i,p in enumerate(pairs[:1,:]):
 for i,p in enumerate(pairs):
+
     if i % 500 == 0:
         print(f'tracing the {i} ray')
     ## Event location in lat/lon
@@ -50,31 +57,38 @@ for i,p in enumerate(pairs):
     slon=p[2]
     slat=p[3]
 
+    if elat>-30.5 or elat<-34 or elon>126 or elon<120 or \
+        slat>-30.5 or slat<-34 or slon>126 or slon<120:
+        continue
     ## Event and Station in km
     xe=elon*deg2km;
     ze=elat*deg2km;
     xs=slon*deg2km;
     zs=slat*deg2km;
-
+    
+#     distance.append(locations2degrees(elat,elon,slat,slon)*deg2km)
+    
+    distance.append(np.sqrt((elat-slat)*(elat-slat)+(elon-slon)*(elon-slon))*deg2km);
+#     print(elat,elon,slat,slon,locations2degrees(elat,elon,slat,slon))
     ## Traveltime calculation
     t=fmm.eikonal(vel1d,xyz=np.array([xe,0,ze]),ax=[x0,dx,nx],ay=[0,0.01,1],az=[z0,dz,nz],order=2);
     time=t.reshape(nx,nz,order='F');#first axis (vertical) is x, second is z
     time=time.transpose(); #z,x
     
+#     print(time.shape)
     # Extract the travel time at the station location
     f=RectBivariateSpline(z,x,time)
     tt=f(zs,xs).flatten()[0]
-    tt_pred.append(tt)
-    tt_obs.append(p[4])
     
+    travel_time.append(tt)
     ## Ray tracing begins
     tz,tx = np.gradient(time)
 
     ## trace one ray (source and receiver locations are in decimal grids)
-    stationx=(slon-x0/deg2km)/0.75+1
-    stationz=(slat-z0/deg2km)/0.75+1
-    eventx=(elon-x0/deg2km)/0.75+1
-    eventz=(elat-z0/deg2km)/0.75+1
+    stationx=(slon-x0/deg2km)/ddx+1
+    stationz=(slat-z0/deg2km)/ddz+1
+    eventx=(elon-x0/deg2km)/ddx+1
+    eventz=(elat-z0/deg2km)/ddz+1
 
     ## key function: stream2d
     paths,nrays=fmm.stream2d(-tx,-tz, stationx, stationz, step=0.1, maxvert=10000)
@@ -104,13 +118,17 @@ for i,p in enumerate(pairs):
     # plot the ray
     ax.plot((paths[0,:]-1)*dx/deg2km+x0/deg2km,(paths[1,:]-1)*dz/deg2km+z0/deg2km,
               'k',linewidth=0.1,alpha=0.4);
-plt.savefig('test_16_tomo_rays.png',format='png',dpi=300,bbox_inches='tight', pad_inches=0)
-plt.show()
+# plt.savefig('test_17.png',format='png',dpi=300,bbox_inches='tight', pad_inches=0)
+# plt.show()
 fid.close()
 fid1.close()
 
-# Plot difference between observed and predicted travel times
+# Plot distance-travel time curve
 plt.figure()
-plt.hist(np.asarray(tt_pred)-np.asarray(tt_obs),100)
-plt.savefig('test_16_tomo_rays_hist.png',format='png',dpi=300,bbox_inches='tight', pad_inches=0)
+plt.plot(distance, travel_time,'.')
+print(distance, travel_time,distance[0]/travel_time[0])
+plt.xlabel('Distance (km)')
+plt.ylabel('Travel time (s)')
+plt.savefig('curve2.png',format='png',dpi=300,bbox_inches='tight', pad_inches=0)
 plt.show()
+
