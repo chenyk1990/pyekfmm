@@ -38,6 +38,7 @@ t=fmm.eikonal_rtp(vel,rtp=np.array([6400-evdep,evlat,evlon]),ar=[begr,dr,numr],a
 time=t.reshape(numr,numt,nump,order='F'); #[r,t,p]
 
 import matplotlib.pyplot as plt
+# plt.figure(figsize=(12, 7))
 plt.imshow(time[numr-1,:,:],extent=[begp-180,endp-180,endt-90,begt-90],aspect='auto')#,clim=(0, 2000.0)); #rtp->tp
 plt.gca().invert_yaxis()
 plt.xlabel('Lon (deg)'); 

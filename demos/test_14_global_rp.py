@@ -75,7 +75,7 @@ Y = rad
 fig = plt.figure()
 plt.jet()
 ax = fig.add_subplot(111,projection='polar')
-ax.pcolormesh(X, Y, time) #X,Y & data2D must all be same dimensions
+cm=ax.pcolormesh(X, Y, time) #X,Y & data2D must all be same dimensions
 
 ax.plot(0, 6400-evdep,'*',color='r',markersize=15)
 
@@ -90,18 +90,19 @@ ax.set_theta_zero_location('N', offset=0)
 ax.set_rticks([3200])  # less radial ticks
 ax.set_rlabel_position(-22.5)  # get radial labels away from plotted line
 ax.grid(True)
-ax.set_xlabel('Longitude (deg)')
-ax.set_ylabel('Radius (km)')
+# ax.set_xlabel('Longitude (deg)')
+ax.set_ylabel('Longitude (deg)')
 # ---- mod here ---- #
 # ax.set_theta_zero_location("N")  # theta=0 at the top
 ax.set_theta_direction(-1)  # theta increasing clockwise
+
+cb = plt.colorbar(cm, cax = fig.add_axes([0.37,0.1,0.3,0.02]), format= "%4.0f", orientation='horizontal',label='Traveltime (s)')
 
 
 plt.savefig('test_14_global_rp.png',format='png',dpi=300,bbox_inches='tight', pad_inches=0)
 # plt.savefig('test_14_global_rp.pdf',format='pdf',dpi=300,bbox_inches='tight', pad_inches=0)
 
 plt.show()
-
 
 # fig = plt.figure()
 # plt.imshow(time)
