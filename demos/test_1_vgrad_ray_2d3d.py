@@ -10,6 +10,62 @@ import matplotlib.pyplot as plt
 import pyekfmm as fmm
 import numpy as np
 
+### 1D
+v1=1;
+v2=3;
+nz=501;
+nx=501;
+dx=0.01;
+dz=0.01;
+# vel=3.0*np.ones([501*501,1],dtype='float32'); #velocity axis must be x,y,z respectively
+v=np.linspace(v1,v2,nz);
+v=np.expand_dims(v,1);
+h=np.ones([1,nx])
+vel=np.multiply(v,h,dtype='float32'); #z,x
+# plt.imshow(vel);plt.jet();plt.show()
+
+t=fmm.eikonal(vel.transpose().flatten(order='F'),xyz=np.array([0,0,0]),ax=[0,dx,nx],ay=[0,0.01,1],az=[0,dz,nz],order=2);
+time=t.reshape(nx,nz,order='F');#first axis (vertical) is x, second is z
+time=time.transpose(); #z,x
+
+# tz=np.gradient(time,axis=1);
+# tx=np.gradient(time,axis=0);
+# # or
+tz,tx = np.gradient(time)
+
+
+
+
+# fig = plt.figure(figsize=(16, 8))
+fig, ax = plt.subplots(1, 2, gridspec_kw={'width_ratios': [1, 1.5]})
+plt.subplot(1,2,1);
+fig.tight_layout();
+
+plt.imshow(time,cmap=plt.cm.jet, interpolation='none', extent=[0,5,5,0]); #transpose so that first axis is z, second is x
+plt.plot(0,0.0,'*r',markersize=20);
+plt.xlabel('X (km)');plt.ylabel('Z (km)');
+plt.jet()
+plt.colorbar(orientation='horizontal',shrink=0.6,label='Traveltime (s)');
+
+for ii in range(1,502,50):
+	paths,nrays=fmm.stream2d(-tx,-tz, 501, ii, step=0.1, maxvert=10000)
+	plt.plot(500*dx,(ii-1)*dz,'vb',markersize=15);
+	## plot rays
+	plt.plot((paths[0,:]-1)*dx,(paths[1,:]-1)*dz,'g--',markersize=20);
+
+
+plt.gca().text(-0.5, -0.66, "a)", fontsize=28, color='k')
+
+
+plt.subplot(1,2,2);
+plt.axis('off')
+# plt.gca().get_xaxis().set_visible(False)
+# plt.gca().get_yaxis().set_visible(False)
+
+
+
+### 3D 
+
 
 v1=1;
 v2=3;
@@ -88,22 +144,22 @@ kw = {
 }
 
 # Create a figure with 3D ax
-fig = plt.figure(figsize=(8, 8))
-plt.jet()
-ax = fig.add_subplot(111, projection='3d')
+# fig = plt.figure(figsize=(8, 8))
 
+ax = fig.add_subplot(122, projection='3d')
+plt.jet()
 # Plot contour surfaces
 _ = ax.contourf(
-    X[:, :, -1], Y[:, :, -1], data[:, :, -1],
-    zdir='z', offset=Z.max(), alpha=0.5, **kw
+    X[:, :, -1], Y[:, :, -1], data[:, :, 0],
+    zdir='z', offset=0, alpha=0.7, **kw
 )
 _ = ax.contourf(
     X[0, :, :], data[0, :, :], Z[0, :, :],
-    zdir='y', offset=0, alpha=0.5, **kw
+    zdir='y', offset=0, alpha=0.7, **kw
 )
 C = ax.contourf(
     data[:, -1, :], Y[:, -1, :], Z[:, -1, :],
-    zdir='x', offset=X.max(), alpha=0.5, **kw
+    zdir='x', offset=X.max(), alpha=0.7, **kw
 )
 # --
 
@@ -133,82 +189,35 @@ ax.set(
 # ax.set_box_aspect(None, zoom=0.9)
 
 # Colorbar
-fig.colorbar(C, ax=ax, fraction=0.02, pad=0.1, format= "%4.2f", label='Traveltime (s)')
+cbar=fig.colorbar(C, ax=ax, orientation='horizontal', fraction=0.02, pad=0.1, format= "%.2f", label='Traveltime (s)')
+cbar.ax.locator_params(nbins=5)
 
-plt.gca().scatter(0.0,0,0,s=500,marker='*',color='r')
+plt.gca().scatter(0.0,0,0,s=200,marker='*',color='r')
 plt.gca().set_xlim(0,1);
 plt.gca().set_ylim(0,1);
 plt.gca().set_zlim(0,1);
 
 # plt.savefig('test_1_vgrad_ray3d.png',format='png',dpi=300,bbox_inches='tight', pad_inches=0)
 
-
-
 plt.plot((receivery-1)*dy,(receiverx-1)*dx,(receiverz-1)*dz,'vb',markersize=15);
 ## plot rays
 plt.plot((paths[1,:]-1)*dy,(paths[0,:]-1)*dx,(paths[2,:]-1)*dz,'g--',markersize=20);
 
 
+for ii in range(1,102,10):
+	paths,nrays=fmm.stream3d(-tx,-ty, -tz, 101, 101, ii, step=0.1, maxvert=10000)
+	plt.plot((101-1)*dy,(101-1)*dx,(ii-1)*dz,'vb',markersize=10);
+	## plot rays
+	plt.plot((paths[1,:]-1)*dy,(paths[0,:]-1)*dx,(paths[2,:]-1)*dz,'g--',markersize=20);
+	
+	
+plt.gca().invert_zaxis()
+plt.gca().text(-0.124, 0, -0.66, "b)", fontsize=28, color='k')
+
+plt.savefig('test_1_vgrad_ray_2d3d.png',format='png',dpi=300,bbox_inches='tight', pad_inches=0)
+plt.savefig('test_1_vgrad_ray_2d3d.pdf',format='pdf',dpi=300,bbox_inches='tight', pad_inches=0)
 
 
 # Show Figure
 plt.show()
-
-
-
-
-# 
-# 
-# v1=1;
-# v2=3;
-# nz=501;
-# nx=501;
-# dx=0.01;
-# dz=0.01;
-# # vel=3.0*np.ones([501*501,1],dtype='float32'); #velocity axis must be x,y,z respectively
-# v=np.linspace(v1,v2,nz);
-# v=np.expand_dims(v,1);
-# h=np.ones([1,nx])
-# vel=np.multiply(v,h,dtype='float32'); #z,x
-# # plt.imshow(vel);plt.jet();plt.show()
-# 
-# t=fmm.eikonal(vel.transpose().flatten(order='F'),xyz=np.array([0,0,0]),ax=[0,dx,nx],ay=[0,0.01,1],az=[0,dz,nz],order=2);
-# time=t.reshape(nx,nz,order='F');#first axis (vertical) is x, second is z
-# time=time.transpose(); #z,x
-# 
-# # tz=np.gradient(time,axis=1);
-# # tx=np.gradient(time,axis=0);
-# # # or
-# tz,tx = np.gradient(time)
-# 
-# 
-# 
-# 
-# plt.figure();
-# plt.imshow(time,cmap=plt.cm.jet, interpolation='none', extent=[0,5,5,0]); #transpose so that first axis is z, second is x
-# plt.plot(0,0.0,'*r',markersize=20);
-# plt.xlabel('X (km)');plt.ylabel('Z (km)');
-# plt.jet()
-# plt.colorbar(orientation='horizontal',shrink=0.6,label='Traveltime (s)');
-# 
-# for ii in range(1,502,50):
-# 	paths,nrays=fmm.stream2d(-tx,-tz, 501, ii, step=0.1, maxvert=10000)
-# 	plt.plot(500*dx,(ii-1)*dz,'vb',markersize=15);
-# 	## plot rays
-# 	plt.plot((paths[0,:]-1)*dx,(paths[1,:]-1)*dz,'g--',markersize=20);
-# 
-# plt.savefig('test_1_vgrad_ray.png',format='png',dpi=300,bbox_inches='tight', pad_inches=0)
-# plt.savefig('test_1_vgrad_ray.pdf',format='png',dpi=300,bbox_inches='tight', pad_inches=0)
-# 
-# plt.show()
-# 
-# 
-# 
-# 
-# 
-# ## Verify
-# print(['Testing result:',time.max(),time.min(),time.std(),time.var()])
-# print(['Correct result:',4.4039335, 0.0, 0.7773146, 0.604218])
-# 
-
 

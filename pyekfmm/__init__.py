@@ -24,6 +24,7 @@ from eikonalvtic import *
 
 
 from .stream import stream2d
+from .stream import stream3d
 from .stream import trimrays
 
 

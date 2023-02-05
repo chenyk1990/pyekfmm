@@ -45,8 +45,8 @@ ax = fig.add_subplot(121, projection='3d')
 
 # Plot contour surfaces
 _ = ax.contourf(
-    X[:, :, -1], Y[:, :, -1], data[:, :, -1],
-    zdir='z', offset=Z.max(), **kw
+    X[:, :, -1], Y[:, :, -1], data[:, :, 0],
+    zdir='z', offset=0, **kw
 )
 _ = ax.contourf(
     X[0, :, :], data[0, :, :], Z[0, :, :],
@@ -90,16 +90,17 @@ plt.gca().scatter(0.5,0,0,s=500,marker='*',color='r')
 plt.gca().set_xlim(0,1);
 plt.gca().set_ylim(0,1);
 plt.gca().set_zlim(0,1);
-plt.gca().text(-0.124, 0, 1.66, "a)", fontsize=28, color='k')
+plt.gca().text(-0.124, 0, -0.66, "a)", fontsize=28, color='k')
 plt.title('Isotropic',color='k', fontsize=20)
+plt.gca().invert_zaxis()
 
 ax = fig.add_subplot(122, projection='3d')
 data=np.transpose(time2,(1,0,2)); ## data requires [y,x,z] so tranpose the first and second axis
 
 # Plot contour surfaces
 _ = ax.contourf(
-    X[:, :, -1], Y[:, :, -1], data[:, :, -1],
-    zdir='z', offset=Z.max(), **kw
+    X[:, :, -1], Y[:, :, -1], data[:, :, 0],
+    zdir='z', offset=0, **kw
 )
 _ = ax.contourf(
     X[0, :, :], data[0, :, :], Z[0, :, :],
@@ -146,8 +147,9 @@ plt.gca().scatter(0.5,0,0,s=500,marker='*',color='r')
 plt.gca().set_xlim(0,1);
 plt.gca().set_ylim(0,1);
 plt.gca().set_zlim(0,1);
-plt.gca().text(-0.124, 0, 1.66, "b)", fontsize=28, color='k')
+plt.gca().text(-0.124, 0, -0.66, "b)", fontsize=28, color='k')
 plt.title('Anisotropic',color='k', fontsize=20)
+plt.gca().invert_zaxis()
 
 # position for the colorbar
 cb = plt.colorbar(C, cax = fig.add_axes([0.37,0.1,0.3,0.02]), format= "%4.2f", orientation='horizontal',label='Traveltime (s)')

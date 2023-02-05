@@ -45,7 +45,7 @@ for ii in range(1,502,50):
 	plt.plot((paths[0,:]-1)*dx,(paths[1,:]-1)*dz,'g--',markersize=20);
 
 plt.savefig('test_1_vgrad_ray.png',format='png',dpi=300,bbox_inches='tight', pad_inches=0)
-plt.savefig('test_1_vgrad_ray.pdf',format='png',dpi=300,bbox_inches='tight', pad_inches=0)
+plt.savefig('test_1_vgrad_ray.pdf',format='pdf',dpi=300,bbox_inches='tight', pad_inches=0)
 
 plt.show()
 
