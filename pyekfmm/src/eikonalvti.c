@@ -600,15 +600,18 @@ static bool vtiupdaten (int m, float* res, float* res2, struct Updvti *v[])
 
     *res = t;
     
+    /*The following is revised for 3D*/
     cos2 = 0.;
     for (j=0; j<m; j++) {
-    	if (x == v[j]) {
-	    cos2 = t-v[j]->stencil;
-	    cos2 = cos2*cos2*v[j]->delta/vz1;
-	    break;
-	}
+    	if (x == v[j] || x+1 == v[j]) {
+	    cos2 =cos2+(t-v[j]->stencil)*(t-v[j]->stencil);
+		}
     }
-
+//     cos2 = cos2*v[0]->delta/vz1; 
+	cos2 = cos2*v[0]->delta/vz1;
+    /*The above is revised for 3D*/
+//     if(v[0]->delta!=v[1]->delta || v[0]->delta !=v[2]->delta || v[1]->delta !=v[2]->delta)
+//     printf("v1d=%g,v2d=%g,v3d=%g\n",v[0]->delta,v[1]->delta,v[2]->delta);
     v1 = approx(cos2, vx1, vz1, q1);
 
     b = c = 0.;
@@ -842,7 +845,7 @@ int vtinearsource(float* xs   /* source location [3] */,
 		/* analytical formula (Euclid) for isotropic time */ 
 		itime[i] = sqrtf(vzi*delta2);
 		if (delta2 > 0.) {
-		    cos2 = delta[0]*delta[0]/delta2;
+		    cos2 = (delta[0]*delta[0])/delta2;
 		} else {
 		    cos2 = 1.;
 		}

@@ -11,8 +11,11 @@ t=fmm.eikonal(vel,xyz=np.array([0.5,0,0]),ax=[0,0.01,101],ay=[0,0.01,101],az=[0,
 time=t.reshape(101,101,101,order='F'); #[x,y,z]
 
 velx=3.80395*np.ones([101*101*101,1],dtype='float32'); #velocity axis must be x,y,z respectively
+# velx=3.09354*np.ones([101*101*101,1],dtype='float32'); #velocity axis must be x,y,z respectively
+
 eta=0.340859*np.ones([101*101*101,1],dtype='float32'); #velocity axis must be x,y,z respectively
-t=fmm.eikonalvti(velx,vel,eta,xyz=np.array([0.5,0,0]),ax=[0,0.01,101],ay=[0,0.01,101],az=[0,0.01,101],order=2);
+eta=0.340859*np.ones([101*101*101,1],dtype='float32');
+t=fmm.eikonalvti(velx,vel,eta,xyz=np.array([0.5,0,0]),ax=[0,0.01,101],ay=[0,0.01,101],az=[0,0.01,101],order=1);
 time2=t.reshape(101,101,101,order='F');#first axis (vertical) is x, second is z
 
 

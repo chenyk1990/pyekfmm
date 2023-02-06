@@ -49,7 +49,8 @@ velx=vx.transpose().flatten(order='F') #[z,x] -> [x,z]
 velz=vz.transpose().flatten(order='F')  #[z,x] -> [x,z]
 eta=et.transpose().flatten(order='F') #[z,x] -> [x,z]
 
-t=fmm.eikonalvti(velx,velz,eta,xyz=np.array([3000,0,0]),ax=[0,dx,nx],ay=[0,dx,1],az=[0,dz,nz],order=2);
+## should use order=1 for VTI
+t=fmm.eikonalvti(velx,velz,eta,xyz=np.array([3000,0,0]),ax=[0,dx,nx],ay=[0,dx,1],az=[0,dz,nz],order=1);
 time=t.reshape(nx,nz,order='F');#first axis (vertical) is x, second is z
 
 
@@ -82,7 +83,7 @@ plt.text(-1300, -100, 'c)', fontsize=22)
 
 ax = fig.add_subplot(223,aspect=1.0)
 # plt.imshow(time.transpose(),cmap=plt.cm.jet, interpolation='none', extent=[0,10,10,0]); #transpose so that first axis is z, second is x
-plt.contour(time0.transpose(),np.arange(13)*0.18,extent=[0,xm,0,zm]);
+plt.contour(time0.transpose(),np.arange(13)*0.181,extent=[0,xm,0,zm]);
 plt.gca().invert_yaxis()
 plt.plot(3000,50,'*r',markersize=10)
 plt.xlabel('X (m)');plt.ylabel('Z (m)');
@@ -90,7 +91,7 @@ plt.jet()
 plt.text(-1300, -100, 'd)', fontsize=22)
 
 ax = fig.add_subplot(224,aspect=1.0)
-plt.contour(time.transpose(),np.arange(13)*0.18,extent=[0,xm,0,zm]);
+plt.contour(time.transpose(),np.arange(13)*0.181,extent=[0,xm,0,zm]);
 plt.gca().invert_yaxis()
 plt.plot(3000,50,'*r',markersize=10)
 plt.xlabel('X (m)');plt.ylabel('Z (m)');

@@ -11,7 +11,7 @@ import numpy as np
 velz=3.09354*np.ones([201*201,1],dtype='float32'); #velocity axis must be x,y,z respectively
 velx=3.80395*np.ones([201*201,1],dtype='float32'); #velocity axis must be x,y,z respectively
 eta=0.340859*np.ones([201*201,1],dtype='float32'); #velocity axis must be x,y,z respectively
-t=fmm.eikonalvti(velx,velz,eta,xyz=np.array([5,0,5]),ax=[0,0.05,201],ay=[0,0.05,1],az=[0,0.05,201],order=2);
+t=fmm.eikonalvti(velx,velz,eta,xyz=np.array([5,0,5]),ax=[0,0.05,201],ay=[0,0.05,1],az=[0,0.05,201],order=1);
 time=t.reshape(201,201,order='F');#first axis (vertical) is x, second is z
 
 ## Isotropic case
@@ -26,14 +26,16 @@ plt.contour(time0.transpose(),np.arange(10)*0.2,extent=[0,10,10,0])
 plt.plot(5,5,'*r',markersize=10)
 plt.xlabel('X (km)');plt.ylabel('Z (km)');
 plt.jet()
-plt.text(-1.5, 10.5, 'a)', fontsize=24)
+plt.gca().invert_yaxis()
+plt.text(-1.5, -0.5, 'a)', fontsize=24)
 
 ax = fig.add_subplot(122,aspect=1.0)
 plt.contour(time.transpose(),np.arange(10)*0.2,extent=[0,10,10,0])
 plt.plot(5,5,'*r',markersize=10)
 plt.xlabel('X (km)');plt.ylabel('Z (km)');
 plt.jet()
-plt.text(-1.5, 10.5, 'b)', fontsize=24)
+plt.gca().invert_yaxis()
+plt.text(-1.5, -0.5, 'b)', fontsize=24)
 
 plt.colorbar(orientation='horizontal',cax=fig.add_axes([0.37,0.07,0.3,0.02]),shrink=1,label='Traveltime (s)');
 
