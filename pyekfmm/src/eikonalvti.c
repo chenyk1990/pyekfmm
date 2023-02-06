@@ -969,7 +969,7 @@ void fastmarch_close (void)
 
 void fastmarchvti (float* time                /* time */, 
 		float *itime,
-		float* vx, float *v, float *q /* slowness squared */, 
+		float* vx, float *v, float *q /* vx,vz,eta */, 
 		int* in                    /* in/front/out flag */, 
 		bool* plane                /* if plane source */,
 		int   n3,  int n2,  int n1 /* dimensions */,

@@ -19,7 +19,7 @@ xm=0+dx*(nx-1);zm=0+dz*(nz-1);
 fd = open('./marmvz.bin','rb')
 vz = np.fromfile(fd, dtype = np.float32).reshape([nz,nx],order='F')    #[zxy]
 plt.imshow(vz,extent=[0,(nx-1)*dx,(nz-1)*dz,0]);
-plt.xlabel('X (m)');plt.ylabel('Y (m)');
+plt.xlabel('X (m)');plt.ylabel('Z (m)');
 plt.jet();
 plt.colorbar(orientation='horizontal',label="Velocity (m/s)");
 plt.show()
@@ -28,7 +28,7 @@ plt.show()
 fd = open('./marmvx.bin','rb')
 vx = np.fromfile(fd, dtype = np.float32).reshape([nz,nx],order='F')    #[zxy]
 plt.imshow(vx,extent=[0,(nx-1)*dx,(nz-1)*dz,0]);
-plt.xlabel('X (m)');plt.ylabel('Y (m)');
+plt.xlabel('X (m)');plt.ylabel('Z (m)');
 plt.jet();
 plt.colorbar(orientation='horizontal',label="Velocity (m/s)");
 plt.show()
@@ -37,7 +37,7 @@ plt.show()
 fd = open('./marmeta.bin','rb')
 et = np.fromfile(fd, dtype = np.float32).reshape([nz,nx],order='F')    #[zxy]
 plt.imshow(et,extent=[0,(nx-1)*dx,(nz-1)*dz,0]);
-plt.xlabel('X (m)');plt.ylabel('Y (m)');
+plt.xlabel('X (m)');plt.ylabel('Z (m)');
 plt.jet();
 plt.colorbar(orientation='horizontal',label="Anisotropic parameter "+r'$\eta$');
 plt.show()
@@ -55,14 +55,14 @@ time=t.reshape(nx,nz,order='F');#first axis (vertical) is x, second is z
 
 
 ## Isotropic case
-t=fmm.eikonal(velz,xyz=np.array([3000,0,0]),ax=[0,dx,nx],ay=[0,dx,1],az=[0,dz,nz],order=2);
+t=fmm.eikonal(velz,xyz=np.array([3000,0,0]),ax=[0,dx,nx],ay=[0,dx,1],az=[0,dz,nz],order=1);
 time0=t.reshape(nx,nz,order='F');#first axis (vertical) is x, second is z
 
 
 fig = plt.figure(figsize=(16, 8))
 ax = fig.add_subplot(231,aspect=1.0)
 plt.imshow(vz,extent=[0,(nx-1)*dx,(nz-1)*dz,0]);
-plt.xlabel('X (m)');plt.ylabel('Y (m)');
+plt.xlabel('X (m)');plt.ylabel('Z (m)');
 plt.jet();
 plt.colorbar(orientation='horizontal',aspect=25,label="Velocity (m/s)");
 plt.text(-1300, -100, 'a)', fontsize=22)
