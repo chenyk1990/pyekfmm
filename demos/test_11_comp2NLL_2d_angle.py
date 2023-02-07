@@ -100,6 +100,7 @@ vel=vel[:,:,0].reshape([nz,nx,ny],order='F')  #[zxy]
 ## pyekfmm
 vel=np.swapaxes(vel,0,2).reshape([nz*nx*ny,1],order='F'); #transpose to [xyz]
 shot=np.array([0,0,0],dtype='float32');
+# shot=np.array([stx,sty,stz],dtype='float32');
 t,d,a=fmm.eikonal(vel,xyz=shot,ax=[ox,dx,nx],ay=[oy,dy,ny],az=[oz,dz,nz],order=1,angle=True);
 time=t.reshape(nx,ny,nz,order='F'); #[x,y,z]
 time=np.swapaxes(time,0,2); #[z,x,y]
@@ -121,6 +122,24 @@ plt.title('NLL')
 
 plt.subplot(1,3,2)
 plt.imshow(dip[:,0,:],aspect='auto');plt.gca().set_yticks([]);
+plt.jet();
+plt.title('pyekfmm')
+
+plt.subplot(1,3,3)
+plt.imshow(dip0[:,:,0]-dip[:,0,:],clim=[0,50],aspect='auto');plt.gca().set_yticks([]);
+plt.jet();
+plt.title('NLL-pyekfmm')
+plt.colorbar(orientation='vertical',shrink=0.6);
+plt.show();
+
+plt.figure();
+plt.subplot(1,3,1)
+plt.imshow(azim0[:,:,0],aspect='auto');
+plt.jet();
+plt.title('NLL')
+
+plt.subplot(1,3,2)
+plt.imshow(azim[:,0,:],aspect='auto');plt.gca().set_yticks([]);
 plt.jet();
 plt.title('pyekfmm')
 
