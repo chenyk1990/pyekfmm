@@ -1,35 +1,22 @@
 #!/usr/bin/env python
 # -*- encoding: utf8 -*-
-import glob
-import inspect
-import io
-import os
 
-from setuptools import find_packages
 from setuptools import setup
-
+from distutils.core import Extension
+import numpy
 
 long_description = """
 Source code: https://github.com/chenyk1990/pyekfmm""".strip() 
 
-def read(*names, **kwargs):
-    return io.open(
-        os.path.join(os.path.dirname(__file__), *names),
-        encoding=kwargs.get("encoding", "utf8")).read()
-
-
-from distutils.core import Extension
-import numpy
 eikonalc_module = Extension('eikonalc', sources=['pyekfmm/src/eikonal.c'], 
 										include_dirs=[numpy.get_include()])
 
 eikonalvtic_module = Extension('eikonalvtic', sources=['pyekfmm/src/eikonalvti.c'], 
 										include_dirs=[numpy.get_include()])
-# from numpy.distutils.core import setup 
-# from distutils.core import setup
+
 setup(
     name="pyekfmm",
-    version="0.0.8.3",
+    version="0.0.8.4",
     license='GNU General Public License, Version 3 (GPLv3)',
     description="Fast Marching Method for Traveltime Calculation",
     long_description=long_description,
@@ -55,7 +42,7 @@ setup(
         "License :: OSI Approved :: GNU General Public License v3 (GPLv3)"
     ],
     keywords=[
-        "seismology", "exploration seismology", "array seismology", "denoising", "science", "signal-to-noise ratio", "damped rank reduction method"
+        "seismology", "exploration seismology", "array seismology", "traveltime", "ray tracing", "earthquake location", "earthquake relocation", "surface wave tomography", "body wave tomography"
     ],
     install_requires=[
         "numpy", "scipy", "matplotlib"
