@@ -161,23 +161,29 @@ ax.set_theta_zero_location('W', offset=90)
 ax.set_theta_zero_location('N', offset=0)
 # ax.set_rmax(2)
 ax.set_rticks([3200])  # less radial ticks
-ax.set_rlabel_position(-22.5)  # get radial labels away from plotted line
+ax.set_rlabel_position([-22.5])  # get radial labels away from plotted line
 ax.grid(True)
 # ax.set_xlabel('Longitude (deg)')
-ax.set_ylabel('Longitude (deg)')
+ax.set_ylabel('Longitude (deg)',rotation=70)
 # ---- mod here ---- #
 # ax.set_theta_zero_location("N")  # theta=0 at the top
 ax.set_theta_direction(-1)  # theta increasing clockwise
-
+# plt.xticks([-45,0,45],['45$^o$S','0$^o$','45$^o$N'])
+# plt.yticks([3200],['90'])
+# 
 cb = plt.colorbar(cm, cax = fig.add_axes([0.37,0.1,0.3,0.02]), format= "%4.0f", orientation='horizontal',label='Traveltime (s)')
+
+# ax.text(-2000, 20, 'Longitude (deg)',  rotation=0)
+ax.text(-2000, 1500, 'Depth (km)', rotation=0)
 
 cax = fig.add_axes([0.15,0.4,0.2,0.2])
 plt.text(0,0, "b)", fontsize=28, color='k')
 plt.axis('off')
 
-
-# plt.savefig('test_14_global_plot.pdf',format='pdf',dpi=300,bbox_inches='tight', pad_inches=0)
+# # plt.yticks([0,-60],['00','60 S']) #not work
+# # plt.yticks([3200],['90']) #not work
+plt.savefig('test_14_global_plot.pdf',format='pdf',dpi=300,bbox_inches='tight', pad_inches=0)
 plt.savefig('test_14_global_plot.png',format='png',dpi=300,bbox_inches='tight', pad_inches=0)
-
-# add a title.
+# 
+# # add a title.
 plt.show()

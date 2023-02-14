@@ -90,9 +90,17 @@ plt.gca().set_xlim(xmin=lonmin,xmax=lonmax);
 plt.gca().set_ylim(ymin=latmin,ymax=latmax);	
 plt.setp(plt.gca().get_xticklabels(), visible=False)
 plt.ylabel('Latitude (deg)')
+plt.plot(-149.8997,61.2176,'*y',label='Manual',markersize=14);
+plt.text(-149.8997,61.2176,'Anchorage, Alaska',color='y',fontsize=14)
+
+
+#below is to add frameboxes to highlight the comparison
+import matplotlib.patches as patches
+for ii in range(len(lons)):
+	rect = patches.Rectangle((lons[ii]-0.05, lats[ii]-0.0125), 0.1, 0.025, linewidth=1, edgecolor='b', facecolor='none')
+	plt.gca().add_patch(rect)
 
 cax = fig.add_axes([0.1,0.1,0.6,0.15])
-
 plt.plot(lons,deps,'r*',alpha=0.7);	
 plt.plot(lons2,deps2,'g*',alpha=0.7);	
 plt.plot(stlons,stdeps,'kv');	
@@ -100,7 +108,12 @@ plt.gca().invert_yaxis()
 plt.gca().set_xlim(xmin=lonmin,xmax=lonmax);
 plt.xlabel('Longitude (deg)')
 plt.ylabel('Depth (km)')
-
+#below is to add frameboxes to highlight the comparison
+for ii in range(len(lons)):
+	rect = patches.Rectangle((lons[ii]-0.05, deps[ii]-3), 0.1, 6, linewidth=1, edgecolor='b', facecolor='none')
+	plt.gca().add_patch(rect)
+	
+	
 cax = fig.add_axes([0.75,0.3,0.15,0.6])
 plt.plot(deps,lats,'r*',alpha=0.7);	
 plt.plot(deps2,lats2,'g*',alpha=0.7);	
@@ -108,6 +121,11 @@ plt.plot(stdeps,stlats,'kv');
 plt.setp(plt.gca().get_yticklabels(), visible=False)
 plt.gca().set_ylim(ymin=latmin,ymax=latmax);	
 plt.xlabel('Depth (km)')
+#below is to add frameboxes to highlight the comparison
+for ii in range(len(lons)):
+	rect = patches.Rectangle((deps[ii]-3, lats[ii]-0.0125), 6, 0.025, linewidth=1, edgecolor='b', facecolor='none')
+	plt.gca().add_patch(rect)
+
 
 plt.legend(['NLL', 'FMM','Station'],loc='best', bbox_to_anchor=(0.8, -0.35, 0.2, 0.2))
 plt.savefig('test_11_comp2NLL_2d_angle_location_plot.png',format='png',dpi=300)
