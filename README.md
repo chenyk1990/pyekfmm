@@ -3,8 +3,7 @@
 
 ## Description
 
-**Pyekfmm** is an eikonal solver using the fast marching method.
-
+**Pyekfmm** is an eikonal solver using the fast marching method. Since Feb, 14, 2023, this official site of pyefkmm package has been moved to https://github.com/aaspip/pyekfmm. The current site of the package is no longer maintained.
 
 ## Reference
     Chen et al. (2023). Pyekfmm: a python package for 3D traveltime calculation based on the fast marching method. in preparation
