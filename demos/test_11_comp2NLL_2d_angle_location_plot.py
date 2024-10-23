@@ -1,7 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import os
 
-fid=open('/Users/chenyk/softs/NonLinLoc/nlloc_sample_test/loc-old/alaska.sum.grid0.loc.hyp','r')
+fid=open(os.getenv('HOME')+'/DATALIB/softs/NonLinLoc/nlloc_sample_test/loc-old/alaska.sum.grid0.loc.hyp','r')
 lines=fid.readlines()
 
 ne=0;
@@ -28,7 +29,7 @@ for ii in range(len(lines)):
 
 
 
-fid=open('/Users/chenyk/softs/NonLinLoc/nlloc_sample_test/locfmm/alaska.sum.grid0.loc.hyp','r')
+fid=open(os.getenv('HOME')+'/DATALIB/softs/NonLinLoc/nlloc_sample_test/locfmm/alaska.sum.grid0.loc.hyp','r')
 lines=fid.readlines()
 
 ne=0;
@@ -53,7 +54,7 @@ for ii in range(len(lines)):
 		
 
 
-fid=open('/Users/chenyk/softs/NonLinLoc/nlloc_sample_test/obs/station_coordinates.txt');
+fid=open(os.getenv('HOME')+'/DATALIB/softs/NonLinLoc/nlloc_sample_test/obs/station_coordinates.txt');
 lines=fid.readlines();
 lines=lines[1:]
 stnames=[ii.split()[1] for ii in lines];

@@ -17,6 +17,7 @@
 import pyekfmm as fmm
 import numpy as np
 import matplotlib.pyplot as plt
+import os
 
 ## axes information
 nx=401;
@@ -44,12 +45,12 @@ sty=9.933220;
 stz=-0.390000;
 
 ## reference time from NLL
-file_time='/Users/chenyk/softs/NonLinLoc/nlloc_sample_test/time/layer.P.AK_RC01_--.time.buf'
+file_time=os.getenv('HOME')+'/DATALIB/softs/NonLinLoc/nlloc_sample_test/time/layer.P.AK_RC01_--.time.buf'
 fd = open(file_time,'rb')
 time0=np.fromfile(fd, dtype = np.float32).reshape([nz,nx,ny*2],order='F')
 time0=time0[:,:,0].reshape([nz,nx,ny],order='F')
 
-file_time='/Users/chenyk/softs/NonLinLoc/nlloc_sample_test/time/layer.P.AK_RC01_--.angle.buf'
+file_time=os.getenv('HOME')+'/DATALIB/softs/NonLinLoc/nlloc_sample_test/time/layer.P.AK_RC01_--.angle.buf'
 fd = open(file_time,'rb')
 data = np.fromfile(fd, dtype = np.uint16);#.reshape([nz,nx,ny*4],order='F')    #[zxy]
 dip0=data[np.linspace(0,nz*nx*ny*2-2,nz*nx*ny,dtype='int')]/16/10;
@@ -59,7 +60,7 @@ dip0=dip0.reshape([nz,nx,ny],order='F')
 azim0=azim0.reshape([nz,nx,ny],order='F')
 
 ## 3D vel from NLL
-file_vel='/Users/chenyk/softs/NonLinLoc/nlloc_sample_test/model/layer.P.mod.buf'
+file_vel=os.getenv('HOME')+'/DATALIB/softs/NonLinLoc/nlloc_sample_test/model/layer.P.mod.buf'
 fd = open(file_vel,'rb')
 vel = 1./np.fromfile(fd, dtype = np.float32).reshape([nz,nx,ny*2],order='F')  #[zxy]
 vel=vel[:,:,0].reshape([nz,nx,ny],order='F')  #[zxy]
@@ -134,12 +135,12 @@ plt.show();
 
 plt.figure();
 plt.subplot(1,3,1)
-plt.imshow(azim0[:,:,0],aspect='auto');
+plt.imshow(azim0[:,:,0],clim=(0, 50),aspect='auto');
 plt.jet();
 plt.title('NLL')
 
 plt.subplot(1,3,2)
-plt.imshow(azim[:,0,:],aspect='auto');plt.gca().set_yticks([]);
+plt.imshow(azim[:,0,:],clim=(0, 50),aspect='auto');plt.gca().set_yticks([]);
 plt.jet();
 plt.title('pyekfmm')
 

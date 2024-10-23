@@ -45,13 +45,13 @@ sty=22.598270;
 stz=-1.743000;
 
 ## reference time from NLL
-file_time='/Users/chenyk/softs/GrowClust3D.jl/examples/data/ekfmm/ekfmm-grd3/g2t3.P.BEK.time.buf'
-# file_time='/Users/chenyk/softs/GrowClust3D.jl/examples/data/nll/nll-grd3-old/g2t3.P.BEK.time.buf'
+# file_time='/Users/chenyk/softs/GrowClust3D.jl/examples/data/ekfmm/ekfmm-grd3/g2t3.P.BEK.time.buf'
+file_time='/Users/chenyk/DATALIB/softs/GrowClust3D.jl/examples/data/nll/nll-grd3/g2t3.P.BEK.time.buf'
 fd = open(file_time,'rb')
 data = np.fromfile(fd, dtype = np.float32).reshape([nz,nx,ny],order='F')    #[zxy]
 
 ## 3D vel from NLL
-file_vel='/Users/chenyk/softs/GrowClust3D.jl/examples/data/nll/nll-run/v2g3.inp.P.mod.buf'
+file_vel='/Users/chenyk/DATALIB/softs/GrowClust3D.jl/examples/data/nll/nll-run/v2g3.inp.P.mod.buf'
 fd = open(file_vel,'rb')
 vel = 1./np.fromfile(fd, dtype = np.float32).reshape([nz,nx,ny],order='F')  #[zxy]
 
@@ -85,17 +85,17 @@ vel=np.swapaxes(vel,0,2).reshape([nz*nx*ny,1],order='F'); #transpose to [xyz]
 
 
 ## read station list
-fid=open('/Users/chenyk/softs/GrowClust3D.jl/examples/data/nll/nll-run/nll-sta.txt');
+fid=open('/Users/chenyk/DATALIB/softs/GrowClust3D.jl/examples/data/nll/nll-run/nll-sta.txt');
 lines=fid.readlines();
 lines=lines[1:]
 stnames=[ii.split()[1] for ii in lines];
 
-os.system("cp -r /Users/chenyk/softs/GrowClust3D.jl/examples/data/nll/nll-grd3/g2t3.P.mod.* /Users/chenyk/softs/GrowClust3D.jl/examples/data/ekfmm/ekfmm-grd3/")
+os.system("cp -r /Users/chenyk/DATALIB/softs/GrowClust3D.jl/examples/data/nll/nll-grd3/g2t3.P.mod.* /Users/chenyk/softs/GrowClust3D.jl/examples/data/ekfmm/ekfmm-grd3/")
 for ii in range(len(stnames)):
 	name=stnames[ii]
-	os.system("cp -r /Users/chenyk/softs/GrowClust3D.jl/examples/data/nll/nll-grd3/g2t3.P.%s.time.hdr /Users/chenyk/softs/GrowClust3D.jl/examples/data/ekfmm/ekfmm-grd3/g2t3.P.%s.time.hdr"%(name,name))
+	os.system("cp -r /Users/chenyk/DATALIB/softs/GrowClust3D.jl/examples/data/nll/nll-grd3/g2t3.P.%s.time.hdr /Users/chenyk/softs/GrowClust3D.jl/examples/data/ekfmm/ekfmm-grd3/g2t3.P.%s.time.hdr"%(name,name))
 
-	fid=open('/Users/chenyk/softs/GrowClust3D.jl/examples/data/ekfmm/ekfmm-grd3/g2t3.P.%s.time.hdr'%name)
+	fid=open('/Users/chenyk/DATALIB/softs/GrowClust3D.jl/examples/data/ekfmm/ekfmm-grd3/g2t3.P.%s.time.hdr'%name)
 	line=fid.readlines()[1];
 	shot=np.array(line.split()[1:4],dtype='float32')
 	print(name,shot[0],shot[1],shot[2])
@@ -103,7 +103,7 @@ for ii in range(len(stnames)):
 	t=fmm.eikonal(vel,xyz=shot,ax=[ox,dx,nx],ay=[oy,dy,ny],az=[oz,dz,nz],order=1);
 	time=t.reshape(nx,ny,nz,order='F'); #[x,y,z]
 	time=np.swapaxes(time,0,2); #[z,x,y]
-	fd=open('/Users/chenyk/softs/GrowClust3D.jl/examples/data/ekfmm/ekfmm-grd3/g2t3.P.%s.time.buf'%name,'wb')
+	fd=open('/Users/chenyk/DATALIB/softs/GrowClust3D.jl/examples/data/ekfmm/ekfmm-grd3/g2t3.P.%s.time.buf'%name,'wb')
 	np.float32(time).flatten(order='F').tofile(fd)
 	
 ## Plot
